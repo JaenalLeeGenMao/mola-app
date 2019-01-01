@@ -1,4 +1,4 @@
-package com.example.firstapp;
+package com.example.molaapp;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

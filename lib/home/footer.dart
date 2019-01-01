@@ -13,7 +13,7 @@ class Footer extends StatelessWidget {
     return new Positioned(
       left: 0.0,
       right: 0.0,
-      bottom: 0.0,
+      bottom: 10.0,
       child: new Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
