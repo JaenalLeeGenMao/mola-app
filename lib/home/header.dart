@@ -33,7 +33,9 @@ class Header extends StatelessWidget {
                   CupertinoIcons.search,
                   size: 36,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  print("search something...");
+                },
               ),
               SizedBox(
                 width: 4.0,
@@ -49,7 +51,9 @@ class Header extends StatelessWidget {
                   CupertinoIcons.profile_circled,
                   size: 36,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  print("profile looking good :3");
+                },
               ),
             ],
           )

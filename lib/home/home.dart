@@ -6,6 +6,8 @@ import 'package:transformer_page_view/transformer_page_view.dart';
 
 import './api.dart';
 
+// import 'models/playlist.dart';
+
 import './header.dart';
 import './footer.dart';
 
@@ -23,13 +25,19 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> _playlists = [];
   List<dynamic> _videos = [];
 
+  var _activePlaylist;
+  var _activeVideo;
+
   final SwiperController _controller = new SwiperController();
 
   _init() async {
-    var data = await getHomeDetails();
+    var data = await getHomeDetails(); /* Fetch data */
 
-    _playlists = data[0];
-    _videos = data[1];
+    _playlists = data[0]; /* initialised playlists */
+    _videos = data[1]; /* initialised videos */
+
+    _activePlaylist = _playlists[0]; /* set active playlist on init */
+    _activeVideo = _videos[0][0]; /* set active video on init */
 
     _handleColorChange();
   }
@@ -42,11 +50,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   _handleColorChange({int row = 0, int column = 0}) {
-    var result = _videos[row][column];
-    print("$row, $column");
-    print(_videos[2]);
+    var currentPlaylist = _playlists[row];
+    var currentVideo = _videos[row][column == null ? 0 : column];
+
     setState(() {
-      _isDark = result["isDark"] == 1;
+      _activePlaylist = currentPlaylist;
+      _activeVideo = currentVideo;
+      _isDark = currentVideo["isDark"] == 1;
     });
   }
 
@@ -57,10 +67,13 @@ class _HomePageState extends State<HomePage> {
         _PlaylistWidget(
             handleColorChange: _handleColorChange,
             controller: _controller,
-            videos: _videos,
-            playlists: _playlists),
+            playlists: _playlists,
+            videos: _videos),
         Header(_isDark),
-        Footer(_controller)
+        Footer(
+            controller: _controller,
+            video: _activeVideo,
+            playlist: _activePlaylist)
       ]),
     );
   }
@@ -124,19 +137,41 @@ class _PlaylistSwiperWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-        // elevation: 4.0,
-        textStyle: new TextStyle(color: Colors.white),
-        // borderRadius: new BorderRadius.circular(10.0),
-        child: new Swiper(
+    return Scaffold(
+        backgroundColor: Colors.black87,
+        body: new Swiper(
           itemCount: videos.length,
           transformer: new PageTransformerBuilder(
               builder: (Widget child, TransformInfo info) {
             return new Stack(
               fit: StackFit.expand,
               children: <Widget>[
+                new Positioned(
+                    child: new ParallaxContainer(
+                      child: new Text(videos[info.index]["title"],
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  offset: Offset(1.0, 2.0),
+                                  blurRadius: 1.0,
+                                  color: Color.fromARGB(125, 9, 76, 126),
+                                ),
+                                Shadow(
+                                  offset: Offset(2.0, 1.0),
+                                  blurRadius: 6.0,
+                                  color: Color.fromARGB(0, 9, 76, 126),
+                                ),
+                              ])),
+                      position: info.position,
+                      translationFactor: 500.0,
+                    ),
+                    left: 20.0,
+                    right: 20.0,
+                    top: 100),
                 new Image.network(
-                  videos[info.index.toInt()]["background"],
+                  videos[info.index]["background"],
                   fit: BoxFit.fill,
                 ),
                 new DecoratedBox(
@@ -154,34 +189,70 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                // new Positioned(
-                //   child: new Column(
-                //     mainAxisSize: MainAxisSize.min,
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: <Widget>[
-                //       new ParallaxContainer(
-                //         child: new Text(
-                //           text0[info.index],
-                //           style: new TextStyle(fontSize: 15.0),
-                //         ),
-                //         position: info.position,
-                //         translationFactor: 300.0,
-                //       ),
-                //       new SizedBox(
-                //         height: 8.0,
-                //       ),
-                //       new ParallaxContainer(
-                //         child: new Text(text1[info.index],
-                //             style: new TextStyle(fontSize: 18.0)),
-                //         position: info.position,
-                //         translationFactor: 200.0,
-                //       ),
-                //     ],
-                //   ),
-                //   left: 10.0,
-                //   right: 10.0,
-                //   bottom: 10.0,
-                // ),
+                new Positioned(
+                  child: new Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new ParallaxContainer(
+                        child: new Padding(
+                          padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 5.0),
+                          child: new Text(
+                            videos[info.index]["quotes"]["text"],
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                            style: new TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontSize: 12.0,
+                                color: Colors.white70),
+                          ),
+                        ),
+                        position: info.position,
+                        translationFactor: 400.0,
+                      ),
+                      new ParallaxContainer(
+                        child: new Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: new Text(
+                              videos[info.index]["quotes"]["author"],
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              style: new TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w200,
+                                  fontStyle: FontStyle.italic)),
+                        ),
+                        position: info.position,
+                        translationFactor: 600.0,
+                      ),
+                      new ParallaxContainer(
+                        child: new Container(
+                            margin: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: new BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: FractionalOffset.bottomCenter,
+                                    end: FractionalOffset.topCenter,
+                                    colors: [Colors.white24, Colors.white24]),
+                                borderRadius: new BorderRadius.circular(8.0)),
+                            child: new Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: new Text(videos[info.index]["description"],
+                                  textAlign: TextAlign.justify,
+                                  maxLines: 6,
+                                  style: new TextStyle(
+                                      fontSize: 12.0, color: Colors.white)),
+                            )),
+                        position: info.position,
+                        translationFactor: 200.0,
+                      ),
+                    ],
+                  ),
+                  left: 25.0,
+                  right: 25.0,
+                  bottom: 80.0,
+                ),
               ],
             );
           }),

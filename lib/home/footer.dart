@@ -3,10 +3,14 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-class Footer extends StatelessWidget {
-  final SwiperController _controller;
+import './models/playlist.dart';
 
-  Footer(this._controller);
+class Footer extends StatelessWidget {
+  final SwiperController controller;
+  final Map<String, dynamic> video;
+  final Playlist playlist;
+
+  Footer({this.controller, this.video, this.playlist});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +26,10 @@ class Footer extends StatelessWidget {
             // shape: RoundedRectangleBorder(),
             // mini: true,
             backgroundColor: Colors.transparent,
-            child: Icon(
-              CupertinoIcons.home,
-              size: 44,
-              color: Colors.white,
-            ),
+            child: Image.asset("assets/library.png", width: 40, height: 40),
             onPressed: () {
-              print("First");
+              print("first");
+              print(playlist.id);
             },
           ),
           Material(
@@ -36,16 +37,12 @@ class Footer extends StatelessWidget {
             color: Colors.white,
             child: SizedBox(
               width: 140,
-              height: 44,
+              height: 40,
               child: FlatButton(
                 child: Row(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(
-                      CupertinoIcons.video_camera,
-                      size: 24,
-                      color: Colors.black,
-                    ),
+                    Image.asset("assets/clip.png", width: 20, height: 20),
                     SizedBox(
                       width: 4.0,
                     ),
@@ -55,7 +52,9 @@ class Footer extends StatelessWidget {
                   ],
                 ),
                 onPressed: () {
-                  print("Second");
+                  print("second");
+                  print(video["id"]);
+                  print(video["background"]);
                 },
               ),
             ),
@@ -72,7 +71,7 @@ class Footer extends StatelessWidget {
                 child: Icon(Icons.chevron_left, size: 24, color: Colors.white),
                 onPressed: () {
                   print("Third");
-                  _controller.previous();
+                  controller.previous();
                 },
               ),
               SizedBox(
@@ -86,7 +85,7 @@ class Footer extends StatelessWidget {
                 child: Icon(Icons.chevron_right, size: 24, color: Colors.white),
                 onPressed: () {
                   print("Forth");
-                  _controller.next();
+                  controller.next();
                 },
               ),
               SizedBox(

@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:core';
 import 'package:http/http.dart' as http;
 
+import './models/playlist.dart';
+// import './models/video.dart';
+
 import '../config.dart';
 
 final Map<String, dynamic> data = config();
@@ -16,27 +19,16 @@ getHomePlaylist() async {
     var data = result["data"].length > 0
         ? result["data"][0]["attributes"]["playlists"]
         : [];
-    data = data.map((playlist) {
-      return {
-        "id": playlist["id"],
-        "title": playlist["attributes"]["title"],
-        "sortOrder": playlist["attributes"]["sortOrder"],
-        "description": playlist["attributes"]["description"],
-        "shortDescription": playlist["attributes"]["shortDescription"],
-        "iconUrl": playlist["attributes"]["iconUrl"],
-        "background": playlist["attributes"]["images"]["cover"]["background"]
-            ["mobile"]["portrait"],
-        "details": playlist["attributes"]["images"]["cover"]["details"]
-            ["mobile"]["portrait"],
-        "isDark": playlist["attributes"]["isDark"],
-        "type": playlist["type"],
-      };
-    }).toList()
-      ..sort((a, b) {
-        return a["sortOrder"].toString().compareTo(b["sortOrder"].toString());
-      });
 
-    return data;
+    return data.length == 0
+        ? []
+        : data.map((eachPlaylist) {
+            var playlist = new Playlist.fromJson(eachPlaylist);
+            return playlist;
+          }).toList()
+      ..sort((a, b) {
+        return a.sortOrder.toString().compareTo(b.sortOrder.toString());
+      });
   } else {
     return [];
   }
@@ -52,20 +44,26 @@ getHomeVideos(id) async {
         ? result["data"][0]["attributes"]["videos"]
         : [];
 
-    data = data.map((playlist) {
+    data = data.map((video) {
+      var primaryQuote = video["attributes"]["quotes"][0]["attributes"];
       return {
-        "id": playlist["id"],
-        "title": playlist["attributes"]["title"],
-        "displayOrder": playlist["attributes"]["displayOrder"],
-        "description": playlist["attributes"]["description"],
-        "shortDescription": playlist["attributes"]["shortDescription"],
-        "iconUrl": playlist["attributes"]["iconUrl"],
-        "background": playlist["attributes"]["images"]["cover"]["background"]
+        "id": video["id"],
+        "title": video["attributes"]["title"],
+        "displayOrder": video["attributes"]["displayOrder"],
+        "description": video["attributes"]["description"],
+        "shortDescription": video["attributes"]["shortDescription"],
+        "iconUrl": video["attributes"]["iconUrl"],
+        "background": video["attributes"]["images"]["cover"]["background"]
             ["mobile"]["portrait"],
-        "details": playlist["attributes"]["images"]["cover"]["details"]
-            ["mobile"]["portrait"],
-        "isDark": playlist["attributes"]["isDark"],
-        "type": playlist["type"],
+        "details": video["attributes"]["images"]["cover"]["details"]["mobile"]
+            ["portrait"],
+        "isDark": video["attributes"]["isDark"],
+        "type": video["type"],
+        "quotes": {
+          "author": primaryQuote["author"],
+          "role": primaryQuote["role"],
+          "text": primaryQuote["text"]
+        }
       };
     }).toList()
       ..sort((a, b) {
@@ -75,9 +73,7 @@ getHomeVideos(id) async {
       });
     return data;
   } else {
-    return [
-      {"id": id}
-    ];
+    return [];
   }
 }
 
@@ -87,7 +83,7 @@ getHomeDetails() async {
 
   for (var playlist in playlists) {
     // var playlistId = playlist["id"].replaceAll(new RegExp(r'f-'), '');
-    var result = await getHomeVideos(playlist["id"]);
+    var result = await getHomeVideos(playlist.id);
 
     videos.add(result);
   }
