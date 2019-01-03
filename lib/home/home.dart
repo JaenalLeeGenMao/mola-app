@@ -64,21 +64,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? Loader()
-        : Scaffold(
-            body: Stack(children: <Widget>[
-            _PlaylistWidget(
-                handleColorChange: _handleColorChange,
-                controller: _controller,
-                playlists: _playlists,
-                videos: _videos),
-            Header(_isDark),
-            Footer(
-                controller: _controller,
-                video: _activeVideo,
-                playlist: _activePlaylist)
-          ]));
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+            child: _isLoading
+                ? Loader()
+                : Stack(children: <Widget>[
+                    _PlaylistWidget(
+                        handleColorChange: _handleColorChange,
+                        controller: _controller,
+                        playlists: _playlists,
+                        videos: _videos),
+                    Header(_isDark),
+                    Footer(
+                        controller: _controller,
+                        video: _activeVideo,
+                        playlist: _activePlaylist)
+                  ])));
   }
 }
 
@@ -132,131 +134,132 @@ class _PlaylistSwiperWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.black87,
-        body: new Swiper(
-          itemCount: videos.length,
-          transformer: new PageTransformerBuilder(
-              builder: (Widget child, TransformInfo info) {
-            var title = videos[info.index].title;
-            var author = videos[info.index].quotes[0].author;
-            var quote = videos[info.index].quotes[0].text;
-            return new Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                new Positioned(
-                    child: new ParallaxContainer(
-                      child: new Text(title,
-                          style: TextStyle(
+    return new Swiper(
+      itemCount: videos.length,
+      transformer: new PageTransformerBuilder(
+          builder: (Widget child, TransformInfo info) {
+        var title = videos[info.index].title;
+        var author = videos[info.index].quotes[0].author;
+        var quote = videos[info.index].quotes[0].text;
+        return new Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            new Container(
+              color: Colors.black87,
+            ),
+            new Positioned(
+                child: new ParallaxContainer(
+                  child: new Text(title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          shadows: <Shadow>[
+                            Shadow(
+                              offset: Offset(1.0, 2.0),
+                              blurRadius: 1.0,
+                              color: Color.fromARGB(125, 9, 76, 126),
+                            ),
+                            Shadow(
+                              offset: Offset(2.0, 1.0),
+                              blurRadius: 6.0,
+                              color: Color.fromARGB(0, 9, 76, 126),
+                            ),
+                          ])),
+                  position: info.position,
+                  translationFactor: 500.0,
+                ),
+                left: 20.0,
+                right: 20.0,
+                top: 100),
+            new Image.network(
+              videos[info.index].background,
+              fit: BoxFit.fill,
+            ),
+            new DecoratedBox(
+              decoration: new BoxDecoration(
+                gradient: new LinearGradient(
+                  begin: FractionalOffset.bottomCenter,
+                  end: FractionalOffset.topCenter,
+                  colors: [
+                    const Color(0xFF000000),
+                    const Color(0xA7000000),
+                    const Color(0x00000000),
+                    const Color(0x00000000),
+                    const Color(0x00000000),
+                  ],
+                ),
+              ),
+            ),
+            new Positioned(
+              child: new Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new ParallaxContainer(
+                    child: new Padding(
+                      padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 5.0),
+                      child: new Text(
+                        "“$quote”",
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                        style: new TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 12.0,
+                            color: Colors.white70),
+                      ),
+                    ),
+                    position: info.position,
+                    translationFactor: 400.0,
+                  ),
+                  new ParallaxContainer(
+                    child: new Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: new Text("— $author",
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: new TextStyle(
                               color: Colors.white,
-                              fontSize: 24,
-                              shadows: <Shadow>[
-                                Shadow(
-                                  offset: Offset(1.0, 2.0),
-                                  blurRadius: 1.0,
-                                  color: Color.fromARGB(125, 9, 76, 126),
-                                ),
-                                Shadow(
-                                  offset: Offset(2.0, 1.0),
-                                  blurRadius: 6.0,
-                                  color: Color.fromARGB(0, 9, 76, 126),
-                                ),
-                              ])),
-                      position: info.position,
-                      translationFactor: 500.0,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w400,
+                              fontStyle: FontStyle.italic)),
                     ),
-                    left: 20.0,
-                    right: 20.0,
-                    top: 100),
-                new Image.network(
-                  videos[info.index].background,
-                  fit: BoxFit.fill,
-                ),
-                new DecoratedBox(
-                  decoration: new BoxDecoration(
-                    gradient: new LinearGradient(
-                      begin: FractionalOffset.bottomCenter,
-                      end: FractionalOffset.topCenter,
-                      colors: [
-                        const Color(0xFF000000),
-                        const Color(0xA7000000),
-                        const Color(0x00000000),
-                        const Color(0x00000000),
-                        const Color(0x00000000),
-                      ],
-                    ),
+                    position: info.position,
+                    translationFactor: 600.0,
                   ),
-                ),
-                new Positioned(
-                  child: new Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new ParallaxContainer(
+                  new ParallaxContainer(
+                    child: new Container(
+                        margin: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(5.0),
+                        decoration: new BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: FractionalOffset.bottomCenter,
+                                end: FractionalOffset.topCenter,
+                                colors: [Colors.white24, Colors.white24]),
+                            borderRadius: new BorderRadius.circular(8.0)),
                         child: new Padding(
-                          padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 5.0),
-                          child: new Text(
-                            "“$quote”",
-                            textAlign: TextAlign.center,
-                            maxLines: 3,
-                            style: new TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontSize: 12.0,
-                                color: Colors.white70),
-                          ),
-                        ),
-                        position: info.position,
-                        translationFactor: 400.0,
-                      ),
-                      new ParallaxContainer(
-                        child: new Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: new Text("— $author",
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
+                          padding: EdgeInsets.all(10.0),
+                          child: new Text(videos[info.index].description,
+                              textAlign: TextAlign.justify,
+                              maxLines: 6,
                               style: new TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w200,
-                                  fontStyle: FontStyle.italic)),
-                        ),
-                        position: info.position,
-                        translationFactor: 600.0,
-                      ),
-                      new ParallaxContainer(
-                        child: new Container(
-                            margin: const EdgeInsets.all(15.0),
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: new BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: FractionalOffset.bottomCenter,
-                                    end: FractionalOffset.topCenter,
-                                    colors: [Colors.white24, Colors.white24]),
-                                borderRadius: new BorderRadius.circular(8.0)),
-                            child: new Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: new Text(videos[info.index].description,
-                                  textAlign: TextAlign.justify,
-                                  maxLines: 6,
-                                  style: new TextStyle(
-                                      fontSize: 12.0, color: Colors.white)),
-                            )),
-                        position: info.position,
-                        translationFactor: 200.0,
-                      ),
-                    ],
+                                  fontSize: 12.0, color: Colors.white)),
+                        )),
+                    position: info.position,
+                    translationFactor: 200.0,
                   ),
-                  left: 25.0,
-                  right: 25.0,
-                  bottom: 80.0,
-                ),
-              ],
-            );
-          }),
-          controller: controller,
-          onIndexChanged: (int index) {
-            handleColorChange(row: row, column: index);
-          },
-        ));
+                ],
+              ),
+              left: 25.0,
+              right: 25.0,
+              bottom: 80.0,
+            ),
+          ],
+        );
+      }),
+      controller: controller,
+      onIndexChanged: (int index) {
+        handleColorChange(row: row, column: index);
+      },
+    );
   }
 }

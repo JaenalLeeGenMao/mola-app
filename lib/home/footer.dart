@@ -62,10 +62,12 @@ class Footer extends StatelessWidget {
                 ),
                 onPressed: () {
                   print("second");
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Detail(video.id)));
+                  if (video.id != null) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Detail(video.id)));
+                  }
                   print(video.id);
                   print(video.background);
                 },

@@ -6,10 +6,10 @@ import './detail/detail.dart';
 
 getRoutes() {
   return {
-    '/': (context) => new HomePage(title: 'Flutter Demo Home Page'),
+    '/': (context) => HomePage(title: 'Flutter Demo Home Page'),
     '/profile': (context) => Profile(),
     '/search': (context) => Search(),
-    '/library': (context) => Library("0"),
-    '/detail': (context) => Detail("0"),
+    '/library': (context) => Library(null),
+    '/detail': (context) => Detail(null),
   };
 }

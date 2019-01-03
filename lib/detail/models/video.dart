@@ -32,7 +32,7 @@ class Video {
         fullDescription = json["attributes"]["fullDescription"],
         iconUrl = json["attributes"]["iconUrl"],
         background = json["attributes"]["images"]["cover"]["background"]
-            ["mobile"]["portrait"],
+            ["desktop"]["landscape"],
         details = json["attributes"]["images"]["cover"]["details"]["mobile"]
             ["portrait"],
         isDark = json["attributes"]["isDark"],
