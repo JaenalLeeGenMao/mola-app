@@ -1,4 +1,4 @@
-Object config() {
+Map<String, dynamic> config() {
   return {
     "clientUrl": "",
     "serverUrl": "https://mola.tv",

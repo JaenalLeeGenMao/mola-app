@@ -4,12 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
-import './api.dart';
-
-// import 'models/playlist.dart';
+import './api/api.dart';
 
 import './header.dart';
 import './footer.dart';
+import './loader.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -21,7 +20,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _isLoading = true;
   bool _isDark = true;
+
   List<dynamic> _playlists = [];
   List<dynamic> _videos = [];
 
@@ -56,37 +57,30 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _activePlaylist = currentPlaylist;
       _activeVideo = currentVideo;
-      _isDark = currentVideo["isDark"] == 1;
+      _isDark = currentVideo.isDark == 1;
+      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(children: <Widget>[
-        _PlaylistWidget(
-            handleColorChange: _handleColorChange,
-            controller: _controller,
-            playlists: _playlists,
-            videos: _videos),
-        Header(_isDark),
-        Footer(
-            controller: _controller,
-            video: _activeVideo,
-            playlist: _activePlaylist)
-      ]),
-    );
+    return _isLoading
+        ? Loader()
+        : Scaffold(
+            body: Stack(children: <Widget>[
+            _PlaylistWidget(
+                handleColorChange: _handleColorChange,
+                controller: _controller,
+                playlists: _playlists,
+                videos: _videos),
+            Header(_isDark),
+            Footer(
+                controller: _controller,
+                video: _activeVideo,
+                playlist: _activePlaylist)
+          ]));
   }
 }
-
-List<String> images = ["", "", ""];
-
-List<String> text0 = [
-  "Merry Chrismast。Jaenal",
-  "春无踪迹谁知。除非问取黄鹂",
-  "山色江声相与清，卷帘待得月华生"
-];
-List<String> text1 = ["若有人知春去处。唤取归来同住", "百啭无人能解，因风飞过蔷薇", "可怜一曲并船笛，说尽故人离别情。"];
 
 class _PlaylistWidget extends StatelessWidget {
   final Function handleColorChange;
@@ -104,6 +98,7 @@ class _PlaylistWidget extends StatelessWidget {
       onIndexChanged: (int index) {
         handleColorChange(row: index);
       },
+      transformer: new ScaleAndFadeTransformer(fade: 1.0, scale: 1.15),
       itemBuilder: (BuildContext context, int index) {
         return _PlaylistSwiperWidget(
             videos: videos[index],
@@ -143,12 +138,15 @@ class _PlaylistSwiperWidget extends StatelessWidget {
           itemCount: videos.length,
           transformer: new PageTransformerBuilder(
               builder: (Widget child, TransformInfo info) {
+            var title = videos[info.index].title;
+            var author = videos[info.index].quotes[0].author;
+            var quote = videos[info.index].quotes[0].text;
             return new Stack(
               fit: StackFit.expand,
               children: <Widget>[
                 new Positioned(
                     child: new ParallaxContainer(
-                      child: new Text(videos[info.index]["title"],
+                      child: new Text(title,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -171,7 +169,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                     right: 20.0,
                     top: 100),
                 new Image.network(
-                  videos[info.index]["background"],
+                  videos[info.index].background,
                   fit: BoxFit.fill,
                 ),
                 new DecoratedBox(
@@ -198,7 +196,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                         child: new Padding(
                           padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 5.0),
                           child: new Text(
-                            videos[info.index]["quotes"]["text"],
+                            "“$quote”",
                             textAlign: TextAlign.center,
                             maxLines: 3,
                             style: new TextStyle(
@@ -213,8 +211,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                       new ParallaxContainer(
                         child: new Container(
                           width: MediaQuery.of(context).size.width,
-                          child: new Text(
-                              videos[info.index]["quotes"]["author"],
+                          child: new Text("— $author",
                               textAlign: TextAlign.center,
                               maxLines: 2,
                               style: new TextStyle(
@@ -238,7 +235,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                                 borderRadius: new BorderRadius.circular(8.0)),
                             child: new Padding(
                               padding: EdgeInsets.all(10.0),
-                              child: new Text(videos[info.index]["description"],
+                              child: new Text(videos[info.index].description,
                                   textAlign: TextAlign.justify,
                                   maxLines: 6,
                                   style: new TextStyle(

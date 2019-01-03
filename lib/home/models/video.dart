@@ -11,7 +11,20 @@ class Video {
   final List<Quotes> quotes;
   final String type;
 
-  Video.fromJson(Map<String, dynamic> json)
+  Video(
+      {this.id,
+      this.title,
+      this.displayOrder,
+      this.description,
+      this.shortDescription,
+      this.iconUrl,
+      this.background,
+      this.details,
+      this.isDark,
+      this.quotes,
+      this.type});
+
+  Video.fromJson(Map<String, dynamic> json, List<Quotes> quotes)
       : id = json["id"],
         title = json["attributes"]["title"],
         displayOrder = json["attributes"]["displayOrder"],
@@ -23,7 +36,7 @@ class Video {
         details = json["attributes"]["images"]["cover"]["details"]["mobile"]
             ["portrait"],
         isDark = json["attributes"]["isDark"],
-        quotes = json["attributes"]["quotes"][0]["attributes"],
+        quotes = quotes,
         type = json["type"];
 
   Map<String, dynamic> toJson() => {
@@ -46,5 +59,11 @@ class Quotes {
   final String role;
   final String text;
 
-  Quotes(this.author, this.role, this.text);
+  Quotes.fromJson(Map<String, dynamic> json)
+      : author = json["attributes"]["author"],
+        role = json["attributes"]["role"],
+        text = json["attributes"]["text"];
+
+  Map<String, dynamic> toJson() =>
+      {"author": author, "role": role, "text": text};
 }

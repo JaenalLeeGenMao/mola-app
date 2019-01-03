@@ -1,13 +1,8 @@
 name: mola_app
 description: A new Flutter project.
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# Read more about versioning at semver.org.
-version: 1.0.0+1
+version: 1.0.0
+author: jaenal leegenmao <jaenal.leegenmao@gmail.com>
+homepage: https://github.com/JaenalLeeGenMao/mola_app
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -18,14 +13,17 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: 0.1.2
 
   # Swiper packages
-  flutter_swiper: ^1.1.4
-  transformer_page_view: ^0.1.4
+  flutter_swiper: 1.1.4
+  transformer_page_view: 0.1.4
+
+  # Animation packages
+  shimmer: 0.0.6
 
   # api call packages
-  http: ^0.12.0
+  http: 0.12.0
 
 dev_dependencies:
   flutter_test:

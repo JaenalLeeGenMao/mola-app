@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:core';
 import 'package:http/http.dart' as http;
 
-import './models/playlist.dart';
-// import './models/video.dart';
+import '../models/playlist.dart';
+import '../models/video.dart';
 
-import '../config.dart';
+import '../../config.dart';
 
 final Map<String, dynamic> data = config();
 final String baseUrl = data["api"];
@@ -39,39 +39,28 @@ getHomeVideos(id) async {
   var response = await http.get(url);
 
   if (response.statusCode == 200) {
-    var result = json.decode(response.body);
-    var data = result["data"].length > 0
-        ? result["data"][0]["attributes"]["videos"]
+    List<Video> result = [];
+    var resultMap = json.decode(response.body);
+    var data = resultMap["data"].length > 0
+        ? resultMap["data"][0]["attributes"]["videos"]
         : [];
 
-    data = data.map((video) {
-      var primaryQuote = video["attributes"]["quotes"][0]["attributes"];
-      return {
-        "id": video["id"],
-        "title": video["attributes"]["title"],
-        "displayOrder": video["attributes"]["displayOrder"],
-        "description": video["attributes"]["description"],
-        "shortDescription": video["attributes"]["shortDescription"],
-        "iconUrl": video["attributes"]["iconUrl"],
-        "background": video["attributes"]["images"]["cover"]["background"]
-            ["mobile"]["portrait"],
-        "details": video["attributes"]["images"]["cover"]["details"]["mobile"]
-            ["portrait"],
-        "isDark": video["attributes"]["isDark"],
-        "type": video["type"],
-        "quotes": {
-          "author": primaryQuote["author"],
-          "role": primaryQuote["role"],
-          "text": primaryQuote["text"]
-        }
-      };
-    }).toList()
-      ..sort((a, b) {
-        return a["displayOrder"]
-            .toString()
-            .compareTo(b["displayOrder"].toString());
-      });
-    return data;
+    for (var index = 0; index < data.length; index++) {
+      var eachVideo = data[index];
+      var primaryQuotes = eachVideo["attributes"]["quotes"];
+
+      List<Quotes> quotes = [];
+
+      for (var primaryQuote in primaryQuotes) {
+        var quote = new Quotes.fromJson(primaryQuote);
+        quotes.add(quote);
+      }
+
+      var video = new Video.fromJson(eachVideo, quotes);
+      result.add(video);
+    }
+
+    return result;
   } else {
     return [];
   }

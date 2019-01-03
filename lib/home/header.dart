@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../profile/profile.dart';
+
 class Header extends StatelessWidget {
   bool isDark = false;
 
@@ -23,6 +25,7 @@ class Header extends StatelessWidget {
           Row(
             children: <Widget>[
               FloatingActionButton(
+                heroTag: 'SEARCH_BUTTON',
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 mini: true,
                 tooltip: "Search",
@@ -35,12 +38,14 @@ class Header extends StatelessWidget {
                 ),
                 onPressed: () {
                   print("search something...");
+                  Navigator.pushNamed(context, '/search');
                 },
               ),
               SizedBox(
                 width: 4.0,
               ),
               FloatingActionButton(
+                heroTag: 'PROFILE_BUTTON',
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 mini: true,
                 tooltip: "Profile",
@@ -53,6 +58,7 @@ class Header extends StatelessWidget {
                 ),
                 onPressed: () {
                   print("profile looking good :3");
+                  Navigator.pushNamed(context, '/profile');
                 },
               ),
             ],
