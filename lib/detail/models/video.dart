@@ -8,6 +8,7 @@ class Video {
   final String background;
   final String details;
   final int isDark;
+  final String streamSourceUrl;
   final List<Quotes> quotes;
   final String type;
 
@@ -21,6 +22,7 @@ class Video {
       this.background,
       this.details,
       this.isDark,
+      this.streamSourceUrl,
       this.quotes,
       this.type});
 
@@ -31,6 +33,7 @@ class Video {
         description = json["attributes"]["description"],
         fullDescription = json["attributes"]["fullDescription"],
         iconUrl = json["attributes"]["iconUrl"],
+        streamSourceUrl = json["attributes"]["streamSourceUrl"],
         background = json["attributes"]["images"]["cover"]["background"]
             ["desktop"]["landscape"],
         details = json["attributes"]["images"]["cover"]["details"]["mobile"]
@@ -49,6 +52,7 @@ class Video {
         "background": background,
         "details": details,
         "isDark": isDark,
+        "streamSourceUrl": streamSourceUrl,
         "quotes": quotes,
         "type": type
       };

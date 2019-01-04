@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+// import 'package:chewie/chewie.dart';
+// import 'package:video_player/video_player.dart';
+
 import './api/api.dart';
 
 import './models/video.dart';
@@ -87,15 +90,17 @@ class _Content extends StatefulWidget {
 }
 
 class _ContentState extends State<_Content> {
-  Video video;
-  var isLoading = true;
+  Video _video;
+  // VideoPlayerController _controller;
+  var _isLoading = true;
 
   _init() async {
     var result = await getVideoDetail(widget.videoId);
     if (result != null) {
       setState(() {
-        video = result;
-        isLoading = false;
+        // _controller = new VideoPlayerController.network(result.streamSourceUrl);
+        _video = result;
+        _isLoading = false;
       });
     }
   }
@@ -110,9 +115,10 @@ class _ContentState extends State<_Content> {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
     return SafeArea(
         child: Scaffold(
-            body: isLoading
+            body: _isLoading
                 ? Text("Loading...")
                 : SingleChildScrollView(
                     child: ConstrainedBox(
@@ -124,41 +130,41 @@ class _ContentState extends State<_Content> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Container(
-                            // A fixed-height child.
-                            color: Colors.black,
-                            height: screenWidth * 9 / 16,
-                            width: screenWidth,
-                            child: Image.network(
-                              video.background,
+                              // A fixed-height child.
+                              color: Colors.black,
+                              height: screenWidth * 9 / 16,
                               width: screenWidth,
-                              // height: 200,
-                            ),
-                          ),
+                              child: Image.network(
+                                _video.background,
+                                width: screenWidth,
+                                height: screenWidth * 9 / 16,
+                              )
+                              // new Chewie(
+                              //   _controller,
+                              //   aspectRatio: 3 / 2,
+                              //   autoPlay: true,
+                              //   looping: true,
+
+                              // Try playing around with some of these other options:
+
+                              // showControls: false,
+                              // materialProgressColors: new ChewieProgressColors(
+                              //   playedColor: Colors.red,
+                              //   handleColor: Colors.blue,
+                              //   backgroundColor: Colors.grey,
+                              //   bufferedColor: Colors.lightGreen,
+                              // ),
+                              // placeholder: new Container(
+                              //   color: Colors.grey,
+                              // ),
+                              // autoInitialize: true,
+                              // ),
+                              ),
                           Container(
                             // Another fixed-height child.
-                            color: Colors.green,
-                            height: 120.0,
-                          ),
-                          Container(
-                            // Another fixed-height child.
-                            color: Colors.yellow,
-                            height: 120.0,
-                          ),
-                          Container(
-                            // Another fixed-height child.
-                            color: Colors.green,
-                            height: 120.0,
-                          ),
-                          Container(
-                            // Another fixed-height child.
-                            color: Colors.yellow,
-                            height: 120.0,
-                          ),
-                          Container(
-                            // Another fixed-height child.
-                            color: Colors.green,
-                            height: 120.0,
-                          ),
+                            color: Colors.black,
+                            height: screenHeight * .8,
+                          )
                         ],
                       ),
                     ),
