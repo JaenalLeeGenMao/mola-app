@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-// import 'package:chewie/chewie.dart';
-// import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
+import 'package:video_player/video_player.dart';
 
 import './api/api.dart';
 
@@ -91,14 +91,14 @@ class _Content extends StatefulWidget {
 
 class _ContentState extends State<_Content> {
   Video _video;
-  // VideoPlayerController _controller;
+  VideoPlayerController _controller;
   var _isLoading = true;
 
   _init() async {
     var result = await getVideoDetail(widget.videoId);
     if (result != null) {
       setState(() {
-        // _controller = new VideoPlayerController.network(result.streamSourceUrl);
+        _controller = new VideoPlayerController.network(result.streamSourceUrl);
         _video = result;
         _isLoading = false;
       });
@@ -121,45 +121,47 @@ class _ContentState extends State<_Content> {
             body: _isLoading
                 ? Text("Loading...")
                 : SingleChildScrollView(
+                    padding: EdgeInsets.all(0.0),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: MediaQuery.of(context).size.height,
                       ),
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Container(
-                              // A fixed-height child.
-                              color: Colors.black,
-                              height: screenWidth * 9 / 16,
-                              width: screenWidth,
-                              child: Image.network(
-                                _video.background,
-                                width: screenWidth,
-                                height: screenWidth * 9 / 16,
-                              )
-                              // new Chewie(
-                              //   _controller,
-                              //   aspectRatio: 3 / 2,
-                              //   autoPlay: true,
-                              //   looping: true,
+                            // A fixed-height child.
+                            color: Colors.black,
+                            // height: screenWidth * 9 / 16,
+                            width: screenWidth,
+                            // child:
+                            child: new Chewie(
+                              _controller,
+                              aspectRatio: 16 / 9,
+                              autoPlay: true,
+                              looping: true,
 
                               // Try playing around with some of these other options:
 
                               // showControls: false,
-                              // materialProgressColors: new ChewieProgressColors(
-                              //   playedColor: Colors.red,
-                              //   handleColor: Colors.blue,
-                              //   backgroundColor: Colors.grey,
-                              //   bufferedColor: Colors.lightGreen,
-                              // ),
-                              // placeholder: new Container(
-                              //   color: Colors.grey,
-                              // ),
-                              // autoInitialize: true,
-                              // ),
+                              materialProgressColors: new ChewieProgressColors(
+                                playedColor: Color.fromRGBO(15, 74, 115, 1.0),
+                                handleColor: Color.fromRGBO(15, 74, 115, 1.0),
+                                backgroundColor:
+                                    Color.fromRGBO(155, 155, 155, .8),
+                                bufferedColor:
+                                    Color.fromRGBO(255, 255, 255, .8),
                               ),
+                              placeholder: new Container(
+                                  color: Colors.grey,
+                                  child: Image.network(
+                                    _video.background,
+                                    width: screenWidth,
+                                    height: screenWidth * 9 / 16,
+                                  )),
+                              autoInitialize: true,
+                            ),
+                          ),
                           Container(
                             // Another fixed-height child.
                             color: Colors.black,
