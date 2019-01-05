@@ -1,5 +1,4 @@
 class Video {
-  /// your id
   final String id;
   final String title;
   final int displayOrder;
