@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
 import './api/api.dart';
 
 import './models/video.dart';
+
+import './loader.dart';
+import './player.dart';
 
 class Detail extends StatelessWidget {
   final String videoId;
@@ -119,7 +121,7 @@ class _ContentState extends State<_Content> {
     return SafeArea(
         child: Scaffold(
             body: _isLoading
-                ? Text("Loading...")
+                ? Loader()
                 : SingleChildScrollView(
                     padding: EdgeInsets.all(0.0),
                     child: ConstrainedBox(
@@ -132,44 +134,107 @@ class _ContentState extends State<_Content> {
                           Container(
                             // A fixed-height child.
                             color: Colors.black,
-                            // height: screenWidth * 9 / 16,
+                            height: screenWidth * 9 / 16,
                             width: screenWidth,
                             // child:
-                            child: new Chewie(
-                              _controller,
-                              aspectRatio: 16 / 9,
-                              autoPlay: true,
-                              looping: true,
-
-                              // Try playing around with some of these other options:
-
-                              // showControls: false,
-                              materialProgressColors: new ChewieProgressColors(
-                                playedColor: Color.fromRGBO(15, 74, 115, 1.0),
-                                handleColor: Color.fromRGBO(15, 74, 115, 1.0),
-                                backgroundColor:
-                                    Color.fromRGBO(155, 155, 155, .8),
-                                bufferedColor:
-                                    Color.fromRGBO(255, 255, 255, .8),
-                              ),
-                              placeholder: new Container(
-                                  color: Colors.grey,
-                                  child: Image.network(
-                                    _video.background,
-                                    width: screenWidth,
-                                    height: screenWidth * 9 / 16,
-                                  )),
-                              autoInitialize: true,
-                            ),
+                            child: new Player(
+                                controller: _controller, video: _video),
                           ),
                           Container(
                             // Another fixed-height child.
                             color: Colors.black,
                             height: screenHeight * .8,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Section(
+                                    title: Container(
+                                        padding: EdgeInsets.only(bottom: 6.0),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 6.0),
+                                                child: Image.asset(
+                                                  "assets/info.png",
+                                                  width: 12,
+                                                  height: 12,
+                                                )),
+                                            Text("INFO",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12))
+                                          ],
+                                        )),
+                                    description: Text.rich(
+                                        TextSpan(text: _video.fullDescription),
+                                        textAlign: TextAlign.justify,
+                                        style: TextStyle(fontSize: 12))),
+                                Section(
+                                    title: Container(
+                                        padding: EdgeInsets.only(bottom: 6.0),
+                                        child: Text("Casts",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12))),
+                                    description: Text.rich(
+                                        TextSpan(
+                                            text:
+                                                "Kurt Cobain, Dave Grohl, Krist Novoselic, Pat smear, Chad Channing"),
+                                        textAlign: TextAlign.justify,
+                                        style: TextStyle(fontSize: 12))),
+                                Section(
+                                    title: Container(
+                                        padding: EdgeInsets.only(bottom: 6.0),
+                                        child: Text("Casts",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12))),
+                                    description: Text.rich(
+                                        TextSpan(text: "AJ Schnack"),
+                                        textAlign: TextAlign.justify,
+                                        style: TextStyle(fontSize: 12))),
+                                Section(
+                                    title: Container(
+                                        padding: EdgeInsets.only(bottom: 6.0),
+                                        child: Text("Casts",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12))),
+                                    description: Text.rich(
+                                        TextSpan(
+                                            text: "Jay Z, Felicia Cahyadi"),
+                                        textAlign: TextAlign.justify,
+                                        style: TextStyle(fontSize: 12))),
+                              ],
+                            ),
                           )
                         ],
                       ),
                     ),
                   )));
+  }
+}
+
+class Section extends StatelessWidget {
+  final Widget title;
+  final Widget description;
+
+  Section({this.title, this.description});
+
+  @override
+  Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+        width: screenWidth,
+        padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[title, description],
+        ));
   }
 }

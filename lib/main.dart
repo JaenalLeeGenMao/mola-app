@@ -6,7 +6,12 @@ import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 
 import './routes.dart';
 
-void main() => runApp(new MyApp());
+void main() async {
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  runApp(new MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -14,7 +19,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
+  /// This widget is the root of your application.
   Color _statusBarColor = Color.fromRGBO(8, 44, 66, 1.0);
   double _statusBarOpacity = 1.0;
   bool _statusBarColorAnimated = false;
@@ -36,6 +41,7 @@ class _MyAppState extends State<MyApp> {
     return new MaterialApp(
         title: 'Flutter Demo',
         theme: new ThemeData(
+            platform: TargetPlatform.android,
             iconTheme: IconThemeData(color: Colors.white),
             primarySwatch: Colors.blue,
             dialogBackgroundColor: Colors.black87,
