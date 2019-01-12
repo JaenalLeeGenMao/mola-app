@@ -35,10 +35,9 @@ class Footer extends StatelessWidget {
             onPressed: () {
               print("first");
               print(playlist.id);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Library(playlist.id)));
+              var playlistId = playlist.id.replaceAll(new RegExp(r'f-'), '');
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Library(playlistId)));
             },
           ),
           Material(

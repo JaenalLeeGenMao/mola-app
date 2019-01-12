@@ -104,7 +104,7 @@ class Loader extends StatelessWidget {
                     Container(
                         margin: EdgeInsets.only(top: 6.0),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6.0),
+                            borderRadius: BorderRadius.circular(3.0),
                             color: Colors.grey),
                         width: screenWidth * .75,
                         height: 120)

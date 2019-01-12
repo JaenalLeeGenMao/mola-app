@@ -31,7 +31,7 @@ class Player extends StatelessWidget {
         bufferedColor: Color.fromRGBO(255, 255, 255, .8),
       ),
       placeholder: new Container(
-          color: Colors.grey,
+          color: Colors.black87,
           child: Image.network(
             video.background,
             width: screenWidth,

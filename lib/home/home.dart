@@ -235,7 +235,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                                 begin: FractionalOffset.bottomCenter,
                                 end: FractionalOffset.topCenter,
                                 colors: [Colors.white24, Colors.white24]),
-                            borderRadius: new BorderRadius.circular(8.0)),
+                            borderRadius: new BorderRadius.circular(3.0)),
                         child: new Padding(
                           padding: EdgeInsets.all(10.0),
                           child: new Text(videos[info.index].description,
