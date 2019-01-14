@@ -134,19 +134,34 @@ class _PlaylistSwiperWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
     return new Swiper(
       itemCount: videos.length,
       transformer: new PageTransformerBuilder(
           builder: (Widget child, TransformInfo info) {
+        var isDummyImagePlaceholder = videos[info.index].background ==
+            'https://cdn01.sent.tv/qaud0dwQwSQsDwdpPvTi_sent_757.png';
+        var isQuoteExist = videos[info.index].quotes.length >
+            0; /* important for validating if quotes exist */
         var title = videos[info.index].title;
-        var author = videos[info.index].quotes[0].author;
-        var quote = videos[info.index].quotes[0].text;
+        var author =
+            isQuoteExist ? videos[info.index].quotes[0].author : 'Comming Soon';
+        var quote = isQuoteExist ? videos[info.index].quotes[0].text : title;
         return new Stack(
           fit: StackFit.expand,
           children: <Widget>[
+            /* default background */
             new Container(
               color: Colors.black87,
             ),
+            /* Dummy placeholder */
+            isDummyImagePlaceholder
+                ? new Image.network(
+                    videos[info.index].background,
+                    fit: BoxFit.fill,
+                  )
+                : Container(),
+            /* Title */
             new Positioned(
                 child: new ParallaxContainer(
                   child: new Text(title,
@@ -171,10 +186,14 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                 left: 20.0,
                 right: 20.0,
                 top: 100),
-            new Image.network(
-              videos[info.index].background,
-              fit: BoxFit.fill,
-            ),
+            /* Valid image */
+            !isDummyImagePlaceholder
+                ? new Image.network(
+                    videos[info.index].background,
+                    fit: BoxFit.fill,
+                  )
+                : Container(),
+            /* gradient */
             new DecoratedBox(
               decoration: new BoxDecoration(
                 gradient: new LinearGradient(
@@ -182,30 +201,37 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                   end: FractionalOffset.topCenter,
                   colors: [
                     const Color(0xFF000000),
-                    const Color(0xA7000000),
-                    const Color(0x00000000),
-                    const Color(0x00000000),
+                    const Color(0xFF000000),
+                    const Color(0xF0000000),
+                    const Color(0x0000000),
                     const Color(0x00000000),
                   ],
                 ),
               ),
             ),
+            /* Content details */
             new Positioned(
               child: new Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   new ParallaxContainer(
-                    child: new Padding(
-                      padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 5.0),
-                      child: new Text(
-                        "“$quote”",
-                        textAlign: TextAlign.center,
-                        maxLines: 3,
-                        style: new TextStyle(
+                    child: new Center(
+                      child: new Container(
+                        padding: EdgeInsets.fromLTRB(
+                            screenWidth * .2, 0.0, screenWidth * .2, 10.0),
+                        child: new Text(
+                          "“$quote”",
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                          style: new TextStyle(
                             fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w700,
+                            wordSpacing: 2.0,
                             fontSize: 12.0,
-                            color: Colors.white70),
+                            color: Color(0x6FFFFFFF),
+                          ),
+                        ),
                       ),
                     ),
                     position: info.position,
@@ -214,14 +240,17 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                   new ParallaxContainer(
                     child: new Container(
                       width: MediaQuery.of(context).size.width,
-                      child: new Text("— $author",
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.italic)),
+                      child: new Text(
+                        "— $author",
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: new TextStyle(
+                            color: Colors.white30,
+                            fontSize: 12,
+                            wordSpacing: 2.0,
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.italic),
+                      ),
                     ),
                     position: info.position,
                     translationFactor: 600.0,
@@ -234,15 +263,22 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                             gradient: LinearGradient(
                                 begin: FractionalOffset.bottomCenter,
                                 end: FractionalOffset.topCenter,
-                                colors: [Colors.white24, Colors.white24]),
+                                colors: [
+                                  const Color(0x10FFFFFF),
+                                  const Color(0x10FFFFFF)
+                                ]),
                             borderRadius: new BorderRadius.circular(3.0)),
                         child: new Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.fromLTRB(21, 12, 21, 12),
                           child: new Text(videos[info.index].description,
-                              textAlign: TextAlign.justify,
                               maxLines: 6,
                               style: new TextStyle(
-                                  fontSize: 12.0, color: Colors.white)),
+                                fontSize: 14,
+                                wordSpacing: 2.0,
+                                color: Color(0xB8FFFFFF),
+                                fontFamily: "Lato",
+                                fontWeight: FontWeight.w700,
+                              )),
                         )),
                     position: info.position,
                     translationFactor: 200.0,
@@ -251,7 +287,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
               ),
               left: 25.0,
               right: 25.0,
-              bottom: 80.0,
+              bottom: 60.0,
             ),
           ],
         );

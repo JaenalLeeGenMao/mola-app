@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import './api/api.dart';
 
 import './header.dart';
+import './loader.dart';
 
 import '../detail/detail.dart'; /* Detail page */
 
@@ -104,7 +105,7 @@ class _LibraryState extends State<Library> {
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: _isLoading
-            ? Text('Loading', style: TextStyle(color: Colors.black))
+            ? Loader()
             : Stack(
                 children: <Widget>[
                   /* Video List */
@@ -130,7 +131,7 @@ class _LibraryState extends State<Library> {
                     opacity: _visible ? 1.0 : 0.0,
                     child: Container(
                       padding: EdgeInsets.fromLTRB(
-                          screenWidth * .26, 54.0, screenWidth * .26, 0.0),
+                          screenWidth * .245, 54.0, screenWidth * .245, 0.0),
                       child: FlatButton(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +140,9 @@ class _LibraryState extends State<Library> {
                             Text(
                               _selected,
                               style: TextStyle(
-                                  color: Colors.black, fontSize: 16.0),
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  letterSpacing: 3.0),
                             ),
                             Icon(
                               _isToggle
@@ -191,7 +194,10 @@ class _LibraryController extends StatelessWidget {
           child: FlatButton(
             child: Text(
               genre.title,
-              style: TextStyle(color: Colors.black, letterSpacing: 4.0),
+              style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: 3.0,
+                  fontWeight: FontWeight.w400),
             ),
             onPressed: () {
               handleToggle(genre.id);
@@ -204,8 +210,8 @@ class _LibraryController extends StatelessWidget {
 }
 
 class _LibraryList extends StatelessWidget {
-  var _videos;
-  var _controller;
+  final _videos;
+  final _controller;
 
   _LibraryList(this._videos, this._controller);
 

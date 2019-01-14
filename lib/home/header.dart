@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class Header extends StatelessWidget {
-  bool isDark = false;
+  final bool isDark;
 
   Header(this.isDark);
 
@@ -33,15 +33,12 @@ class Header extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   child: Icon(
                     CupertinoIcons.search,
-                    size: 36,
+                    size: 32,
                   ),
                   onPressed: () {
                     print("search something...");
                     Navigator.pushNamed(context, '/search');
                   },
-                ),
-                SizedBox(
-                  width: 4.0,
                 ),
                 FloatingActionButton(
                   heroTag: 'PROFILE_BUTTON',
@@ -53,7 +50,7 @@ class Header extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   child: Icon(
                     CupertinoIcons.profile_circled,
-                    size: 36,
+                    size: 32,
                   ),
                   onPressed: () {
                     print("profile looking good :3");

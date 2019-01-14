@@ -31,7 +31,7 @@ class Footer extends StatelessWidget {
             // shape: RoundedRectangleBorder(),
             // mini: true,
             backgroundColor: Colors.transparent,
-            child: Image.asset("assets/library.png", width: 40, height: 40),
+            child: Image.asset("assets/library.png", width: 32, height: 32),
             onPressed: () {
               print("first");
               print(playlist.id);
@@ -44,19 +44,21 @@ class Footer extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(30.0)),
             color: Colors.white,
             child: SizedBox(
-              width: 150,
-              height: 40,
+              width: 128,
+              height: 32,
               child: FlatButton(
                 child: Row(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Image.asset("assets/clip.png", width: 20, height: 20),
+                    Image.asset("assets/clip.png", width: 18, height: 18),
                     SizedBox(
                       width: 8.0,
                     ),
                     Text("Watch Movie",
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w600))
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600))
                   ],
                 ),
                 onPressed: () {
@@ -77,13 +79,19 @@ class Footer extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              FloatingActionButton(
-                heroTag: "LEFT_ARROW",
-                mini: true,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: CircleBorder(side: BorderSide(color: Colors.white)),
-                backgroundColor: Colors.transparent,
-                child: Icon(Icons.chevron_left, size: 24, color: Colors.white),
+              CupertinoButton(
+                minSize: 32,
+                padding: EdgeInsets.all(0.0),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 1.0),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child:
+                      Icon(Icons.chevron_left, size: 18, color: Colors.white),
+                ),
                 onPressed: () {
                   print("Third");
                   controller.previous();
@@ -92,13 +100,19 @@ class Footer extends StatelessWidget {
               SizedBox(
                 width: 8,
               ),
-              FloatingActionButton(
-                heroTag: "RIGHT_ARROW",
-                mini: true,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: CircleBorder(side: BorderSide(color: Colors.white)),
-                backgroundColor: Colors.transparent,
-                child: Icon(Icons.chevron_right, size: 24, color: Colors.white),
+              CupertinoButton(
+                minSize: 32,
+                padding: EdgeInsets.all(0.0),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 1.0),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child:
+                      Icon(Icons.chevron_right, size: 18, color: Colors.white),
+                ),
                 onPressed: () {
                   print("Forth");
                   controller.next();
