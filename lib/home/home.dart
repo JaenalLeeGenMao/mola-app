@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,6 +10,8 @@ import './api/api.dart';
 import './header.dart';
 import './footer.dart';
 import './loader.dart';
+
+import '../detail/detail.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -72,26 +75,31 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: _isLoading
-                ? Loader()
-                : _isError
-                    ? Center(
-                        child: Text('Error'),
-                      )
-                    : Stack(children: <Widget>[
-                        _PlaylistWidget(
-                            handleColorChange: _handleColorChange,
-                            controller: _controller,
-                            playlists: _playlists,
-                            videos: _videos),
-                        Header(_isDark),
-                        Footer(
-                            controller: _controller,
-                            video: _activeVideo,
-                            playlist: _activePlaylist)
-                      ])));
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: _isLoading
+            ? Loader()
+            : _isError
+                ? Center(
+                    child: Text('Error'),
+                  )
+                : Stack(
+                    children: <Widget>[
+                      _PlaylistWidget(
+                        handleColorChange: _handleColorChange,
+                        controller: _controller,
+                        playlists: _playlists,
+                        videos: _videos,
+                      ),
+                      Header(_isDark),
+                      Footer(
+                          controller: _controller,
+                          video: _activeVideo,
+                          playlist: _activePlaylist)
+                    ],
+                  ),
+      ),
+    );
   }
 }
 
@@ -111,9 +119,9 @@ class _PlaylistWidget extends StatelessWidget {
       onIndexChanged: (int index) {
         handleColorChange(row: index);
       },
-      transformer: new ScaleAndFadeTransformer(fade: 1.0, scale: 1.15),
+      transformer: new ScaleAndFadeTransformer(fade: 1.0, scale: .8),
       itemBuilder: (BuildContext context, int index) {
-        return _PlaylistSwiperWidget(
+        return _PlaylistSwiperState(
             videos: videos[index],
             handleColorChange: handleColorChange,
             row: index,
@@ -125,8 +133,8 @@ class _PlaylistWidget extends StatelessWidget {
           builder: DotSwiperPaginationBuilder(
               color: Colors.white30,
               activeColor: Colors.white,
-              size: 11.0,
-              activeSize: 11.0,
+              size: 4.0,
+              activeSize: 40.0,
               space: 5.0)),
       scrollDirection: Axis.vertical,
       itemCount: playlists.length,
@@ -134,14 +142,65 @@ class _PlaylistWidget extends StatelessWidget {
   }
 }
 
-class _PlaylistSwiperWidget extends StatelessWidget {
+class _PlaylistSwiperState extends StatefulWidget {
   final Function handleColorChange;
   final SwiperController controller;
   final int row;
   final List<dynamic> videos;
 
+  _PlaylistSwiperState(
+      {this.handleColorChange, this.row, this.controller, this.videos});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _PlaylistSwiperWidget(
+        videos: videos,
+        handleColorChange: handleColorChange,
+        row: row,
+        controller: controller);
+  }
+}
+
+class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
+  final Function handleColorChange;
+  final SwiperController controller;
+  final int row;
+  final List<dynamic> videos;
+
+  Timer _timer;
+  bool _isTimerChanged = false;
+  double _opacity = 1.0;
+
   _PlaylistSwiperWidget(
       {this.handleColorChange, this.row, this.controller, this.videos});
+
+  _init() {
+    _timer = Timer.periodic(Duration(milliseconds: 4000), (Timer t) {
+      setState(() {
+        _opacity = 0.0;
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          _isTimerChanged = !_isTimerChanged;
+          _opacity = 1;
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    _init();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _timer = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +218,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
         var author =
             isQuoteExist ? videos[info.index].quotes[0].author : 'Comming Soon';
         var quote = isQuoteExist ? videos[info.index].quotes[0].text : title;
+        quote = quote.length > 144 ? quote.substring(0, 144) + "..." : quote;
         return new Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -176,22 +236,24 @@ class _PlaylistSwiperWidget extends StatelessWidget {
             /* Title */
             new Positioned(
                 child: new ParallaxContainer(
-                  child: new Text(title,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          shadows: <Shadow>[
-                            Shadow(
-                              offset: Offset(1.0, 2.0),
-                              blurRadius: 1.0,
-                              color: Color.fromARGB(125, 9, 76, 126),
-                            ),
-                            Shadow(
-                              offset: Offset(2.0, 1.0),
-                              blurRadius: 6.0,
-                              color: Color.fromARGB(0, 9, 76, 126),
-                            ),
-                          ])),
+                  child: new Text(
+                    title,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(1.0, 2.0),
+                            blurRadius: 1.0,
+                            color: Color.fromARGB(125, 9, 76, 126),
+                          ),
+                          Shadow(
+                            offset: Offset(2.0, 1.0),
+                            blurRadius: 6.0,
+                            color: Color.fromARGB(0, 9, 76, 126),
+                          ),
+                        ]),
+                  ),
                   position: info.position,
                   translationFactor: 500.0,
                 ),
@@ -232,40 +294,43 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   new ParallaxContainer(
-                    child: new Center(
-                      child: new Container(
-                        padding: EdgeInsets.fromLTRB(
-                            screenWidth * .2, 0.0, screenWidth * .2, 10.0),
-                        child: new Text(
-                          "“$quote”",
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                          style: new TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w700,
-                            wordSpacing: 2.0,
-                            fontSize: 12.0,
-                            color: Color(0x6FFFFFFF),
+                    child: new Container(
+                      child: new CupertinoButton(
+                          pressedOpacity: .7,
+                          child: new Image.asset(
+                            'assets/custom_clip.png',
+                            width: 100,
+                            height: 100,
                           ),
-                        ),
-                      ),
+                          onPressed: () {
+                            print("Tadaa!!");
+                            if (videos[info.index].id != null) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Detail(videos[info.index].id)));
+                            }
+                          }),
                     ),
                     position: info.position,
-                    translationFactor: 400.0,
+                    translationFactor: 800,
                   ),
                   new ParallaxContainer(
                     child: new Container(
-                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      // width: MediaQuery.of(context).size.width,
                       child: new Text(
-                        "— $author",
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
+                        title.toUpperCase(),
+                        // textAlign: TextAlign.center,
+                        maxLines: 3,
                         style: new TextStyle(
-                            color: Colors.white30,
-                            fontSize: 12,
-                            wordSpacing: 2.0,
-                            fontWeight: FontWeight.w700,
-                            fontStyle: FontStyle.italic),
+                          color: Colors.white,
+                          fontSize: title.length < 15
+                              ? 48
+                              : title.length > 24 ? 29 : 36,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     position: info.position,
@@ -274,27 +339,25 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                   new ParallaxContainer(
                     child: new Container(
                         margin: const EdgeInsets.all(15.0),
-                        padding: const EdgeInsets.all(5.0),
-                        decoration: new BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: FractionalOffset.bottomCenter,
-                                end: FractionalOffset.topCenter,
-                                colors: [
-                                  const Color(0x10FFFFFF),
-                                  const Color(0x10FFFFFF)
-                                ]),
-                            borderRadius: new BorderRadius.circular(3.0)),
                         child: new Padding(
-                          padding: EdgeInsets.fromLTRB(21, 12, 21, 12),
-                          child: new Text(videos[info.index].description,
-                              maxLines: 6,
+                          padding: EdgeInsets.all(0),
+                          child: new AnimatedOpacity(
+                            opacity: _opacity,
+                            duration: Duration(milliseconds: 500),
+                            child: new Text(
+                              _isTimerChanged
+                                  ? videos[info.index].description
+                                  : "“$quote” — $author",
+                              maxLines: 4,
                               style: new TextStyle(
                                 fontSize: 14,
-                                wordSpacing: 2.0,
+                                // wordSpacing: 2.0,
                                 color: Color(0xB8FFFFFF),
                                 fontFamily: "Lato",
                                 fontWeight: FontWeight.w700,
-                              )),
+                              ),
+                            ),
+                          ),
                         )),
                     position: info.position,
                     translationFactor: 200.0,
@@ -303,7 +366,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
               ),
               left: 25.0,
               right: 25.0,
-              bottom: 60.0,
+              bottom: 70.0,
             ),
           ],
         );
@@ -312,6 +375,16 @@ class _PlaylistSwiperWidget extends StatelessWidget {
       onIndexChanged: (int index) {
         handleColorChange(row: row, column: index);
       },
+      pagination: SwiperPagination(
+          alignment: Alignment.bottomRight,
+          margin: new EdgeInsets.all(25.0),
+          builder: DotSwiperPaginationBuilder(
+              direction: "vertical",
+              color: Colors.white30,
+              activeColor: Colors.white,
+              size: 4.0,
+              activeSize: 40.0,
+              space: 5.0)),
     );
   }
 }

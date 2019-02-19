@@ -51,6 +51,7 @@ flutter:
     - assets/library.png
     - assets/clip.png
     - assets/info.png
+    - assets/custom_clip.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

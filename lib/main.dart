@@ -41,14 +41,17 @@ class _MyAppState extends State<MyApp> {
     return new MaterialApp(
         title: 'Flutter Demo',
         theme: new ThemeData(
-            fontFamily: 'Lato',
-            platform: TargetPlatform.android,
-            iconTheme: IconThemeData(color: Colors.white),
-            primarySwatch: Colors.blue,
-            dialogBackgroundColor: Colors.black87,
-            textTheme: Theme.of(context)
-                .textTheme
-                .apply(bodyColor: Colors.white, displayColor: Colors.white)),
+          primaryColor: Colors.white,
+          fontFamily: 'Lato',
+          platform: TargetPlatform.android,
+          iconTheme: IconThemeData(color: Colors.white),
+          primarySwatch: Colors.blue,
+          dialogBackgroundColor: Colors.black87,
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: Colors.white,
+                displayColor: Colors.white,
+              ),
+        ),
         initialRoute: '/',
         routes: getRoutes());
   }
