@@ -146,6 +146,7 @@ class _PlaylistSwiperWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
     return new Swiper(
       itemCount: videos.length,
       transformer: new PageTransformerBuilder(
@@ -205,21 +206,25 @@ class _PlaylistSwiperWidget extends StatelessWidget {
                   )
                 : Container(),
             /* gradient */
-            new DecoratedBox(
-              decoration: new BoxDecoration(
-                gradient: new LinearGradient(
-                  begin: FractionalOffset.bottomCenter,
-                  end: FractionalOffset.topCenter,
-                  colors: [
-                    const Color(0xFF000000),
-                    const Color(0xFF000000),
-                    const Color(0xF0000000),
-                    const Color(0x0000000),
-                    const Color(0x00000000),
-                  ],
-                ),
-              ),
-            ),
+            new Positioned(
+                bottom: 0.0,
+                child: new Container(
+                  width: screenWidth,
+                  height: screenHeight * .5,
+                  child: new DecoratedBox(
+                    decoration: new BoxDecoration(
+                      gradient: new LinearGradient(
+                        begin: FractionalOffset.bottomCenter,
+                        end: FractionalOffset.topCenter,
+                        colors: [
+                          const Color(0xFF000000),
+                          const Color(0xF0000000),
+                          const Color(0x00000000),
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
             /* Content details */
             new Positioned(
               child: new Column(
