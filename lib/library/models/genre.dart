@@ -6,11 +6,11 @@ class Genre {
   final int sortOrder;
 
   Genre.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        title = json["attributes"]["title"],
-        description = json["attributes"]["description"],
-        countryCode = json["attributes"]["countryCode"],
-        sortOrder = json["attributes"]["sortOrder"];
+      : id = json["id"] ?? "",
+        title = json["attributes"]["title"] ?? "",
+        description = json["attributes"]["description"] ?? "",
+        countryCode = json["attributes"]["countryCode"] ?? "",
+        sortOrder = json["attributes"]["sortOrder"] ?? 0;
 
   Map<String, dynamic> toJson() => {
         "id": id,

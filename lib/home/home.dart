@@ -20,8 +20,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isLoading = true;
   bool _isDark = true;
+  bool _isLoading = true;
+  bool _isError = false;
 
   List<dynamic> _playlists = [];
   List<dynamic> _videos = [];
@@ -37,10 +38,16 @@ class _HomePageState extends State<HomePage> {
     _playlists = data[0]; /* initialised playlists */
     _videos = data[1]; /* initialised videos */
 
-    _activePlaylist = _playlists[0]; /* set active playlist on init */
-    _activeVideo = _videos[0][0]; /* set active video on init */
+    if (_playlists.length > 0 && _videos.length > 0) {
+      _activePlaylist = _playlists[0]; /* set active playlist on init */
+      _activeVideo = _videos[0][0]; /* set active video on init */
 
-    _handleColorChange();
+      _handleColorChange();
+    } else {
+      setState(() {
+        _isError = true;
+      });
+    }
   }
 
   @override
@@ -69,18 +76,22 @@ class _HomePageState extends State<HomePage> {
         body: SafeArea(
             child: _isLoading
                 ? Loader()
-                : Stack(children: <Widget>[
-                    _PlaylistWidget(
-                        handleColorChange: _handleColorChange,
-                        controller: _controller,
-                        playlists: _playlists,
-                        videos: _videos),
-                    Header(_isDark),
-                    Footer(
-                        controller: _controller,
-                        video: _activeVideo,
-                        playlist: _activePlaylist)
-                  ])));
+                : _isError
+                    ? Center(
+                        child: Text('Error'),
+                      )
+                    : Stack(children: <Widget>[
+                        _PlaylistWidget(
+                            handleColorChange: _handleColorChange,
+                            controller: _controller,
+                            playlists: _playlists,
+                            videos: _videos),
+                        Header(_isDark),
+                        Footer(
+                            controller: _controller,
+                            video: _activeVideo,
+                            playlist: _activePlaylist)
+                      ])));
   }
 }
 

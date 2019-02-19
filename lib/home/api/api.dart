@@ -12,7 +12,9 @@ final String baseUrl = data["api"];
 getHomePlaylist() async {
   final url = '$baseUrl/videos/playlists/mola-home';
 
-  var response = await http.get(url);
+  var response = await http.get(url).timeout(const Duration(seconds: 5));
+  print("timeout nih");
+  print(response.toString());
   if (response.statusCode == 200) {
     var result = json.decode(response.body);
     var data = result["data"].length > 0

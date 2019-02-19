@@ -25,19 +25,21 @@ class Video {
       this.type});
 
   Video.fromJson(Map<String, dynamic> json, List<Quotes> quotes)
-      : id = json["id"],
-        title = json["attributes"]["title"],
+      : id = json["id"] ?? "",
+        title = json["attributes"]["title"] ?? "",
         displayOrder = json["attributes"]["displayOrder"],
-        description = json["attributes"]["description"],
-        fullDescription = json["attributes"]["fullDescription"],
-        iconUrl = json["attributes"]["iconUrl"],
+        description = json["attributes"]["description"] ?? "",
+        fullDescription = json["attributes"]["fullDescription"] ?? "",
+        iconUrl = json["attributes"]["iconUrl"] ?? "",
         background = json["attributes"]["images"]["cover"]["background"]
-            ["mobile"]["portrait"],
+                ["mobile"]["portrait"] ??
+            "",
         details = json["attributes"]["images"]["cover"]["details"]["mobile"]
-            ["portrait"],
-        isDark = json["attributes"]["isDark"],
+                ["portrait"] ??
+            "",
+        isDark = json["attributes"]["isDark"] ?? 0,
         quotes = quotes,
-        type = json["type"];
+        type = json["type"] ?? "";
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -61,10 +63,10 @@ class Quotes {
   final String imageUrl;
 
   Quotes.fromJson(Map<String, dynamic> json)
-      : author = json["attributes"]["author"],
-        role = json["attributes"]["role"],
-        text = json["attributes"]["text"],
-        imageUrl = json["attributes"]["imageUrl"];
+      : author = json["attributes"]["author"] ?? "",
+        role = json["attributes"]["role"] ?? "",
+        text = json["attributes"]["text"] ?? "",
+        imageUrl = json["attributes"]["imageUrl"] ?? "";
 
   Map<String, dynamic> toJson() =>
       {"author": author, "role": role, "text": text, "imageUrl": imageUrl};
