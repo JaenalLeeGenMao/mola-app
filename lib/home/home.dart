@@ -379,7 +379,7 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
           alignment: Alignment.bottomRight,
           margin: new EdgeInsets.all(25.0),
           builder: DotSwiperPaginationBuilder(
-              direction: "vertical",
+              // direction: "vertical",
               color: Colors.white30,
               activeColor: Colors.white,
               size: 4.0,
