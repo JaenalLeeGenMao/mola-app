@@ -103,6 +103,7 @@ class _LibraryState extends State<Library> {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: _isLoading
             ? Loader()
@@ -110,20 +111,24 @@ class _LibraryState extends State<Library> {
                 children: <Widget>[
                   /* Video List */
                   Container(
-                    // color: Colors.white,
-                    margin: EdgeInsets.only(top: _visible ? 120 : 10),
+                    margin: EdgeInsets.only(top: _visible ? 70 : 10),
                     child: _LibraryList(_videos, _controller),
                   ),
                   /* Genre List */
-                  _isToggle
-                      ? Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(top: _visible ? 100 : 10),
-                          child: _LibraryController(
+                  _isToggle ? 
+                      Opacity(
+                        opacity: 0.9,
+                        child: Container(
+                          color: Colors.black,
+                          padding: EdgeInsets.only(top: _visible ? 50 : 10),
+                          child: 
+                          _LibraryController(
+                            select:_selected,
                             genres: _genres,
                             handleToggle: this.handleToggleGenre,
                           ),
-                        )
+                        ),
+                      ) 
                       : Container(),
                   /* Genre Button */
                   AnimatedOpacity(
@@ -131,25 +136,39 @@ class _LibraryState extends State<Library> {
                     opacity: _visible ? 1.0 : 0.0,
                     child: Container(
                       padding: EdgeInsets.fromLTRB(
-                          screenWidth * .245, 54.0, screenWidth * .245, 0.0),
+                          screenWidth * .245, 8.0, screenWidth * .245, 10.0),
                       child: FlatButton(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
+                            _isToggle?
                             Text(
+                             'All Genres',
+                              style: TextStyle(
+                                  color: Colors.grey[400],
+                                  fontSize: 16.0,
+                                  letterSpacing: 1.0,
+                                  fontFamily: 'Open Sans Reguler'),
+                            ):Text(
                               _selected,
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 16.0,
-                                  letterSpacing: 3.0),
+                                  letterSpacing: 1.0,
+                                  fontFamily: 'Open Sans Reguler'),
                             ),
+                            _isToggle ? 
                             Icon(
-                              _isToggle
-                                  ? Icons.arrow_drop_up
-                                  : Icons.arrow_drop_down,
-                              size: 32.0,
+                              Icons.keyboard_arrow_down,
+                              size: 0.0,
                               color: Colors.black,
+                            )
+                            :
+                            Icon(
+                             Icons.keyboard_arrow_down,
+                              size: 32.0,
+                              color: Colors.white,
                             )
                           ],
                         ),
@@ -162,7 +181,12 @@ class _LibraryState extends State<Library> {
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
                     opacity: _visible ? 1.0 : 0.0,
-                    child: Header(true),
+                    child: 
+                    _isToggle ? Opacity(
+                      opacity: 0.0,
+                      child: Header(true)
+                    ) :
+                     Header(true),
                   )
                 ],
               ),
@@ -173,31 +197,45 @@ class _LibraryState extends State<Library> {
 
 class _LibraryController extends StatelessWidget {
   final genres;
+  final select;
   final Function handleToggle;
 
-  _LibraryController({this.genres, this.handleToggle});
+  _LibraryController({this.select, this.genres, this.handleToggle});
 
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    final double itemHeight = screenHeight * .1;
-    final double itemWidth = screenWidth / 2;
+    final double itemHeight = screenHeight * 0.6;
+    final double itemWidth = screenWidth / 0.1;
     return GridView.count(
       // Create a grid with 2 columns. If you change the scrollDirection to
       // horizontal, this would produce 2 rows.
-      crossAxisCount: 2,
+      crossAxisCount: 1,
       childAspectRatio: (itemWidth / itemHeight),
       // Generate 100 Widgets that display their index in the List
       children: genres.map<Widget>((genre) {
         return Center(
           child: FlatButton(
-            child: Text(
+            child:
+            select == genre.title? 
+            Text(
               genre.title,
               style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 3.0,
-                  fontWeight: FontWeight.w400),
+                  color: Colors.white,
+                  letterSpacing: 1.0,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Open Sans Bold',
+                  fontSize: 19.0),
+            )
+            :Text(
+              genre.title,
+              style: TextStyle(
+                  color: Colors.grey[400],
+                  letterSpacing: 1.0,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Open Sans Reguler',
+                  fontSize: 16.0),
             ),
             onPressed: () {
               handleToggle(genre.id);
@@ -222,7 +260,7 @@ class _LibraryList extends StatelessWidget {
             child: Text(
               'konten tidak tersedia',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.0),
             ),
@@ -230,11 +268,14 @@ class _LibraryList extends StatelessWidget {
         : GridView.count(
             controller: _controller,
             crossAxisCount: 2,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
             children: _videos.map<Widget>((video) {
               var _isCover = video.imageUrl != '';
               return FlatButton(
+                // color: Colors.red[600],
                 child: _isCover
-                    ? Image.network(video.imageUrl)
+                    ? Image.network(video.imageUrl,height: 1200.0,width: 700.0, fit: BoxFit.fitHeight)   
                     : Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2.0),
