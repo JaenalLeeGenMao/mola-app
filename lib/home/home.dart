@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:flutter_swiper/flutter_swiper.dart';
+import '../flutter_swiper-1.1.4/lib/flutter_swiper.dart';
+// import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
 import './api/api.dart';
