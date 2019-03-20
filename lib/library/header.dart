@@ -10,6 +10,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Container(
       padding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+      color: Colors.black,
       child: 
         new Stack(
           children: <Widget>[
