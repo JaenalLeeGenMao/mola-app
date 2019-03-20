@@ -22,7 +22,8 @@ dependencies:
   flutter_statusbar_manager: 1.0.2
 
   # Swiper packages
-  flutter_swiper: 1.1.4
+  # flutter_swiper: 1.1.4
+  flutter_page_indicator: 0.0.3
   transformer_page_view: 0.1.4
 
   # Animation packages

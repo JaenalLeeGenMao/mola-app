@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:flutter_swiper/flutter_swiper.dart';
+import '../flutter_swiper-1.1.4/lib/flutter_swiper.dart';
 
 import './models/playlist.dart';
 import './models/video.dart';
