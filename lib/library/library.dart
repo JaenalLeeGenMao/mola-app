@@ -84,20 +84,20 @@ class _LibraryState extends State<Library> {
       print(id.id);
       if (detailVideo.quotes.length > 0) {
         setState(() {
-          _isToggleVideo = true;
+          // _isToggleVideo = true;
           _selectVideo = data;
           _detailVideo = detailVideo;
         });
       } else if (detailVideo.quotes.length <= 0) {
         setState(() {
-          _isToggleVideo = true;
+          // _isToggleVideo = true;
           _selectVideo = data;
           _detailVideo = null;
         });
       }
     } else {
       setState(() {
-        _isToggleVideo = true;
+        // _isToggleVideo = true;
         // _selectVideo =data[0];
       });
     }
@@ -223,11 +223,10 @@ class _LibraryState extends State<Library> {
                   //   opacity: _visible ? 1.0 : 0.0,
                   //   child:
                   Container(
-                    width: 200.0,
-                    margin: EdgeInsets.only(left: 110.0),
+                    width: screenWidth * .56,
+                    margin: EdgeInsets.only(left: screenWidth * 0.2),
                     // color: Colors.red,
-                    // padding: EdgeInsets.fromLTRB(
-                    //     screenWidth * .245, 8.0, screenWidth * .245, 10.0),
+                    padding: EdgeInsets.only(left: screenWidth * 0.03),
                     child: FlatButton(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -435,7 +434,11 @@ class _LibraryList extends StatelessWidget {
                         ),
                       ),
                 onPressed: () {
-                  handelVideo(video);
+                  // handelVideo(video);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Detail(video.id)));
                 },
               ));
             }).toList(),
@@ -466,7 +469,7 @@ class PopUpDetailVideo extends StatelessWidget {
     if (detail != null) {
       author = detail.quotes[0].author;
       quote = detail.quotes[0].text;
-      quote = quote.length > 144 ? quote.substring(0, 144) + "..." : quote;
+      quote = quote.length > 60 ? quote.substring(0, 60) + "..." : quote;
       description = detail.description;
       description = description.length > 144
           ? description.substring(0, 144) + "..."
@@ -502,7 +505,6 @@ class PopUpDetailVideo extends StatelessWidget {
                   height: 300.0,
                 ),
                 onPressed: () {
-                  handleVideoFalse();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -514,20 +516,22 @@ class PopUpDetailVideo extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text("$description",
                     textAlign: TextAlign.center,
+                    maxLines: 4,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0)),
+                        letterSpacing: 1.0,
+                        )),
               ),
               Container(
-                padding: EdgeInsets.only(bottom: 40.0),
+                padding: EdgeInsets.only(bottom: 17.0),
                 alignment: Alignment.center,
                 child: detail != null
                     ? Text("“$quote” — $author",
                         textAlign: TextAlign.center,
 
-                        // maxLines: 4,
+                        maxLines: 2,
                         style: new TextStyle(
                             fontSize: 14,
                             // wordSpacing: 2.0,

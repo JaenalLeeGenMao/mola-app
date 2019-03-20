@@ -8,8 +8,9 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
     return new Container(
-      padding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+      padding: EdgeInsets.fromLTRB(screenWidth * .07, 10.0, 10.0, 10.0),
       color: Colors.black,
       child: 
         new Stack(
