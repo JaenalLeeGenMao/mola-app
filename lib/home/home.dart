@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../flutter_swiper-1.1.4/lib/flutter_swiper.dart';
+import '../package/flutter_swiper/lib/flutter_swiper.dart';
 // import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
+
+import 'package:localstorage/localstorage.dart';
 
 import './api/api.dart';
 
@@ -35,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   var _activeVideo;
 
   final SwiperController _controller = new SwiperController();
+  final LocalStorage storage = new LocalStorage('userinfo');
 
   _init() async {
     var data = await getHomeDetails(); /* Fetch data */
@@ -75,31 +78,43 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: _isLoading
-            ? Loader()
-            : _isError
-                ? Center(
-                    child: Text('Error'),
-                  )
-                : Stack(
-                    children: <Widget>[
-                      _PlaylistWidget(
-                        handleColorChange: _handleColorChange,
-                        controller: _controller,
-                        playlists: _playlists,
-                        videos: _videos,
-                      ),
-                      Header(_isDark),
-                      Footer(
-                          controller: _controller,
-                          video: _activeVideo,
-                          playlist: _activePlaylist)
-                    ],
-                  ),
-      ),
+    return FutureBuilder(
+      future: storage.ready,
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.data == true) {
+          // storage.setItem('tol', 'tol');
+          // print("HAHAHAHAH");
+          // print(storage.getItem('tol'));
+          return Scaffold(
+            backgroundColor: Colors.black,
+            body: SafeArea(
+              child: _isLoading
+                  ? Loader()
+                  : _isError
+                      ? Center(
+                          child: Text('Error'),
+                        )
+                      : Stack(
+                          children: <Widget>[
+                            _PlaylistWidget(
+                              handleColorChange: _handleColorChange,
+                              controller: _controller,
+                              playlists: _playlists,
+                              videos: _videos,
+                            ),
+                            Header(_isDark),
+                            Footer(
+                                controller: _controller,
+                                video: _activeVideo,
+                                playlist: _activePlaylist)
+                          ],
+                        ),
+            ),
+          );
+        } else {
+          return Text("Loading...");
+        }
+      },
     );
   }
 }
@@ -176,14 +191,14 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
       {this.handleColorChange, this.row, this.controller, this.videos});
 
   _init() {
-    _timer = Timer.periodic(Duration(milliseconds: 4000), (Timer t) {
+    _timer = Timer.periodic(Duration(milliseconds: 8000), (Timer t) {
       setState(() {
         _opacity = 0.0;
       });
       Future.delayed(const Duration(milliseconds: 500), () {
         setState(() {
           _isTimerChanged = !_isTimerChanged;
-          _opacity = 1;
+          _opacity = 1.0;
         });
       });
     });
@@ -319,7 +334,7 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
                   ),
                   new ParallaxContainer(
                     child: new Container(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      padding: EdgeInsets.only(left: 10.0, right: 40.0),
                       // width: MediaQuery.of(context).size.width,
                       child: new Text(
                         title.toUpperCase(),
@@ -328,8 +343,8 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
                         style: new TextStyle(
                           color: Colors.white,
                           fontSize: title.length < 15
-                              ? 48
-                              : title.length > 24 ? 29 : 36,
+                              ? 28
+                              : title.length > 24 ? 18 : 24,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

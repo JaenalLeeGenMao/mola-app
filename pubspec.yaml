@@ -33,6 +33,12 @@ dependencies:
   chewie: 0.8.0
   video_player: 0.7.2
 
+  # Localstorage packages
+  localstorage: 1.2.0
+
+  # Launch an url in mobile platform
+  url_launcher: 5.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
