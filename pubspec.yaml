@@ -22,7 +22,8 @@ dependencies:
   flutter_statusbar_manager: 1.0.2
 
   # Swiper packages
-  flutter_swiper: 1.1.4
+  # flutter_swiper: 1.1.4
+  flutter_page_indicator: 0.0.3
   transformer_page_view: 0.1.4
 
   # Animation packages
@@ -31,6 +32,12 @@ dependencies:
   # Video player packages
   chewie: 0.8.0
   video_player: 0.7.2
+
+  # Localstorage packages
+  localstorage: 1.2.0
+
+  # Launch an url in mobile platform
+  url_launcher: 5.0.2
 
 dev_dependencies:
   flutter_test:
