@@ -6,8 +6,6 @@ import '../package/flutter_swiper/lib/flutter_swiper.dart';
 // import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
-import 'package:localstorage/localstorage.dart';
-
 import './api/api.dart';
 
 import './header.dart';
@@ -37,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   var _activeVideo;
 
   final SwiperController _controller = new SwiperController();
-  final LocalStorage storage = new LocalStorage('userinfo');
 
   _init() async {
     var data = await getHomeDetails(); /* Fetch data */
@@ -78,43 +75,31 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: storage.ready,
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.data == true) {
-          // storage.setItem('tol', 'tol');
-          // print("HAHAHAHAH");
-          // print(storage.getItem('tol'));
-          return Scaffold(
-            backgroundColor: Colors.black,
-            body: SafeArea(
-              child: _isLoading
-                  ? Loader()
-                  : _isError
-                      ? Center(
-                          child: Text('Error'),
-                        )
-                      : Stack(
-                          children: <Widget>[
-                            _PlaylistWidget(
-                              handleColorChange: _handleColorChange,
-                              controller: _controller,
-                              playlists: _playlists,
-                              videos: _videos,
-                            ),
-                            Header(_isDark),
-                            Footer(
-                                controller: _controller,
-                                video: _activeVideo,
-                                playlist: _activePlaylist)
-                          ],
-                        ),
-            ),
-          );
-        } else {
-          return Text("Loading...");
-        }
-      },
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: _isLoading
+            ? Loader()
+            : _isError
+                ? Center(
+                    child: Text('Error'),
+                  )
+                : Stack(
+                    children: <Widget>[
+                      _PlaylistWidget(
+                        handleColorChange: _handleColorChange,
+                        controller: _controller,
+                        playlists: _playlists,
+                        videos: _videos,
+                      ),
+                      Header(_isDark),
+                      Footer(
+                          controller: _controller,
+                          video: _activeVideo,
+                          playlist: _activePlaylist)
+                    ],
+                  ),
+      ),
     );
   }
 }
@@ -234,7 +219,7 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
         var author =
             isQuoteExist ? videos[info.index].quotes[0].author : 'Comming Soon';
         var quote = isQuoteExist ? videos[info.index].quotes[0].text : title;
-        quote = quote.length > 144 ? quote.substring(0, 144) + "..." : quote;
+        quote = quote.length > 124 ? quote.substring(0, 124) + "..." : quote;
         return new Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -363,7 +348,7 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
                             child: new Text(
                               _isTimerChanged
                                   ? videos[info.index].description
-                                  : "“$quote” — $author",
+                                  : "“$quote” - $author",
                               maxLines: 4,
                               style: new TextStyle(
                                 fontSize: 14,
