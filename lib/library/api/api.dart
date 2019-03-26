@@ -7,7 +7,10 @@ import '../models/video.dart';
 import '../../config.dart';
 
 final Map<String, dynamic> data = config();
-final String baseUrl = data["api"];
+final String baseUrlProd = data["api"];
+final String baseUrlStaging = data['apiStaging'];
+final String stagingMode = data['staging'];
+final String baseUrl = stagingMode == '1' ? baseUrlStaging : baseUrlProd;
 
 getLibraryGenre() async {
   final url = '$baseUrl/videos/playlists/genre';

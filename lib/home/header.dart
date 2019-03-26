@@ -3,13 +3,19 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../config.dart';
+
+final Map<String, dynamic> data = config();
+
 class Header extends StatelessWidget {
   final bool isDark;
+  final String loginUrl = data['loginUrl'];
+  final String appLink = data['appLink'];
 
   Header(this.isDark);
 
   void _launchURL() async {
-    const url = 'https://mola.tv/accounts/login';
+    var url = '$loginUrl?redirectUri=$appLink';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
