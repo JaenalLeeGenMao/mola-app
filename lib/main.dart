@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
+import 'package:uni_links/uni_links.dart';
 
 import './routes.dart';
 
@@ -18,22 +22,48 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   /// This widget is the root of your application.
   Color _statusBarColor = Color.fromRGBO(8, 44, 66, 1.0);
   double _statusBarOpacity = 1.0;
   bool _statusBarColorAnimated = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    updateStatusBar();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
   @override
-  initState() {
-    updateStatusBar();
-    super.initState();
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint('life cycle test $state');
+
+    if(state == AppLifecycleState.resumed) {
+      print("lifecycle masuk");
+      listenDeepLink();
+    }
+    else{
+      print('life cycle ga masuk');
+    }
   }
 
   void updateStatusBar() {
+    print('masuk ke updateStatusBar');
     FlutterStatusbarManager.setColor(
         _statusBarColor.withOpacity(_statusBarOpacity),
         animated: _statusBarColorAnimated);
+  }
+
+  Future<void> listenDeepLink() async {
+    Uri initialUri = await getInitialUri();
+
+    if(initialUri!=null) {
+      print('pint initialUri $initialUri');
+    }
+    else {
+      print("error no deeplink");
+    }
   }
 
   @override

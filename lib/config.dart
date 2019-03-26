@@ -6,6 +6,8 @@ Map<String, dynamic> config() {
     "auth": "https://mola.tv/accounts/_",
     "domain": "https://mola.tv",
     "ads": "https://api-beta.sent.tv",
-    "setting": {"timeout": 10000, "maxRedirects": 1}
+    "setting": {"timeout": 10000, "maxRedirects": 1},
+    "redirectUri": "molatvapp://callback",
+    "logoutRedirectUri" : "molatvapp://logout"
   };
 }
