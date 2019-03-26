@@ -48,9 +48,9 @@ class Loader extends StatelessWidget {
                 baseColor: Colors.grey,
                 highlightColor: Colors.white,
                 child: Container(
-                  margin: index % 7 != 0
-                      ? EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0)
-                      : EdgeInsets.fromLTRB(10.0, 40.0, 10.0, 40.0),
+                  margin: 
+                      EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                      // : EdgeInsets.fromLTRB(10.0, 40.0, 10.0, 40.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(3.0),
                       color: Colors.grey),

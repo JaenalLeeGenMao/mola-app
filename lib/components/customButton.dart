@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 // import 'package:mola_app/home/loader.dart';
 
-class Button extends StatefulWidget {
+class CustomButton extends StatefulWidget {
   final String title;
   final Color warna;
-  Button(this.title, this.warna);
+  CustomButton(this.title, this.warna);
 
   @override
-  CustomButton createState(){
-    return CustomButton();
+  CustomButtonState createState(){
+    return CustomButtonState();
   }
   
 }
 
-class CustomButton extends State<Button> {
+class CustomButtonState extends State<CustomButton> {
   bool check = false;
 
   @override

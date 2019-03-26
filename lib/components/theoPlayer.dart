@@ -6,17 +6,24 @@ import 'package:video_player/video_player.dart';
 
 import '../detail/models/video.dart';
 
-class Player extends StatelessWidget {
+class Player extends StatefulWidget {
   final Video video;
   final VideoPlayerController controller;
 
   Player({this.video, this.controller});
 
   @override
+  TheoPlayerState createState(){
+    return TheoPlayerState();
+  }
+}
+class TheoPlayerState extends State<Player> {
+  
+  @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return new Chewie(
-      controller,
+      widget.controller,
       aspectRatio: 16 / 9,
       autoPlay: false,
       looping: true,
@@ -33,7 +40,7 @@ class Player extends StatelessWidget {
       placeholder: new Container(
           color: Colors.black87,
           child: Image.network(
-            video.background,
+            widget.video.background,
             width: screenWidth,
             height: screenWidth * 9 / 16,
           )),
