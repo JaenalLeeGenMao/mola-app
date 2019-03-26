@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class Header extends StatelessWidget {
   final bool isDark;
 
   Header(this.isDark);
+
+  void _launchURL() async {
+    const url = 'https://mola.tv/accounts/login';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,22 +52,23 @@ class Header extends StatelessWidget {
                   },
                 ),
                 FloatingActionButton(
-                  heroTag: 'PROFILE_BUTTON',
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  mini: true,
-                  tooltip: "Profile",
-                  elevation: 0.0,
-                  foregroundColor: isDark ? Colors.black : Colors.white,
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    CupertinoIcons.profile_circled,
-                    size: 32,
-                  ),
-                  onPressed: () {
-                    print("profile looking good :3");
-                    Navigator.pushNamed(context, '/profile');
-                  },
-                ),
+                    heroTag: 'PROFILE_BUTTON',
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    mini: true,
+                    tooltip: "Profile",
+                    elevation: 0.0,
+                    foregroundColor: isDark ? Colors.black : Colors.white,
+                    backgroundColor: Colors.transparent,
+                    child: Icon(
+                      CupertinoIcons.profile_circled,
+                      size: 32,
+                    ),
+                    onPressed: () {
+                      print("profile looking good :3");
+                      /* Harusnya ada sesuatu untuk refresh token tapi nanti da */
+                      _launchURL();
+                      Navigator.pushNamed(context, '/profile');
+                    }),
               ],
             )
           ],

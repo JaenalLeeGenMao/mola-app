@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../flutter_swiper-1.1.4/lib/flutter_swiper.dart';
+import '../package/flutter_swiper/lib/flutter_swiper.dart';
 // import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
@@ -176,14 +176,14 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
       {this.handleColorChange, this.row, this.controller, this.videos});
 
   _init() {
-    _timer = Timer.periodic(Duration(milliseconds: 4000), (Timer t) {
+    _timer = Timer.periodic(Duration(milliseconds: 8000), (Timer t) {
       setState(() {
         _opacity = 0.0;
       });
       Future.delayed(const Duration(milliseconds: 500), () {
         setState(() {
           _isTimerChanged = !_isTimerChanged;
-          _opacity = 1;
+          _opacity = 1.0;
         });
       });
     });
@@ -219,7 +219,7 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
         var author =
             isQuoteExist ? videos[info.index].quotes[0].author : 'Comming Soon';
         var quote = isQuoteExist ? videos[info.index].quotes[0].text : title;
-        quote = quote.length > 144 ? quote.substring(0, 144) + "..." : quote;
+        quote = quote.length > 124 ? quote.substring(0, 124) + "..." : quote;
         return new Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -319,7 +319,7 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
                   ),
                   new ParallaxContainer(
                     child: new Container(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      padding: EdgeInsets.only(left: 10.0, right: 40.0),
                       // width: MediaQuery.of(context).size.width,
                       child: new Text(
                         title.toUpperCase(),
@@ -328,8 +328,8 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
                         style: new TextStyle(
                           color: Colors.white,
                           fontSize: title.length < 15
-                              ? 48
-                              : title.length > 24 ? 29 : 36,
+                              ? 28
+                              : title.length > 24 ? 18 : 24,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -348,7 +348,7 @@ class _PlaylistSwiperWidget extends State<_PlaylistSwiperState> {
                             child: new Text(
                               _isTimerChanged
                                   ? videos[info.index].description
-                                  : "“$quote” — $author",
+                                  : "“$quote” - $author",
                               maxLines: 4,
                               style: new TextStyle(
                                 fontSize: 14,
