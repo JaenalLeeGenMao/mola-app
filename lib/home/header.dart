@@ -15,7 +15,7 @@ class Header extends StatelessWidget {
   Header(this.isDark);
 
   void _launchURL() async {
-    var url = '$loginUrl?redirectUrl=$appLink';
+    var url = '$loginUrl?redirectUri=$appLink';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
