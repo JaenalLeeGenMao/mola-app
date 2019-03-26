@@ -5,8 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Header extends StatelessWidget {
   final bool isDark;
+  var accessToken;
 
-  Header(this.isDark);
+  Header(this.isDark, this.accessToken);
 
   void _launchURL() async {
     const url = 'https://mola.tv/accounts/login';
@@ -65,8 +66,10 @@ class Header extends StatelessWidget {
                     ),
                     onPressed: () {
                       print("profile looking good :3");
+                      print("$accessToken");
                       /* Harusnya ada sesuatu untuk refresh token tapi nanti da */
-                      _launchURL();
+                      accessToken == null ?
+                      _launchURL() :
                       Navigator.pushNamed(context, '/profile');
                     }),
               ],
