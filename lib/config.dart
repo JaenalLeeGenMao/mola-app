@@ -14,10 +14,10 @@ Map<String, dynamic> config() {
     "logoutappLink" : "molatvapp://logout",
 
     //staging mode
-    "staging" : "1", 
+    // "staging" : "1", 
 
     //production mode
-    // "staging" : "0", //production
+    "staging" : "0", 
 
     "uploader" : "https://up.mola.tv",
     "uploaderStaging" : "https://up.stag.mola.tv",
