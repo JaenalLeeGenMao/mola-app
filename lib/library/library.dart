@@ -6,6 +6,7 @@ import '../detail/api/api.dart';
 
 import './header.dart';
 import './loader.dart';
+// import '../components/customButton.dart';
 
 import '../detail/detail.dart'; /* Detail page */
 
@@ -276,6 +277,15 @@ class _LibraryState extends State<Library> {
                   //       :
 
                   // )
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: <Widget>[
+                  //     Button('Save Data', Colors.blueAccent),
+                  //     Button('Close', Colors.red)
+                  //   ],
+                  // )
+                  
                 ],
               ),
       ),
@@ -440,6 +450,7 @@ class _LibraryList extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => Detail(video.id)));
                 },
+                
               ));
             }).toList(),
           );
