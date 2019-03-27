@@ -57,6 +57,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   Future<void> listenDeepLink() async {
     Uri initialUri = await getInitialUri();
+    // Uri initialUri2 = await Uri.parse(initialUri);
+    print('initialUri = $initialUri');
 
     if(initialUri!=null) {
       print('pint initialUri $initialUri');
