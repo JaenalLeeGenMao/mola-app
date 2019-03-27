@@ -10,7 +10,7 @@ final Map<String, dynamic> data = config();
 class Header extends StatelessWidget {
   final bool isDark;
   var accessToken;
-  final String loginUrl = data['loginUrl'];
+  final String loginUrl = '${data['accounts']}/login';
   final String appLink = data['appLink'];
 
   Header(this.isDark, this.accessToken);
@@ -74,9 +74,9 @@ class Header extends StatelessWidget {
                       print("profile looking good :3");
                       print("$accessToken");
                       /* Harusnya ada sesuatu untuk refresh token tapi nanti da */
-                      accessToken == null ?
-                      _launchURL() :
-                      Navigator.pushNamed(context, '/profile');
+                      accessToken == null
+                          ? _launchURL()
+                          : Navigator.pushNamed(context, '/profile');
                     }),
               ],
             )
