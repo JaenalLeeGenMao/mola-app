@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
 import './routes.dart';
@@ -27,9 +28,23 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Color _statusBarColor = Color.fromRGBO(8, 44, 66, 1.0);
   double _statusBarOpacity = 1.0;
   bool _statusBarColorAnimated = false;
+  var _accessToken;
+
+  _setAccessToken() async {
+    //get api token in here
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      // set token in here
+      _accessToken = "getApi";
+      prefs.setString('access_token', _accessToken);
+      // prefs.remove('access_token');
+      print('Token Main : $_accessToken');
+    });
+  }
   
   @override
   void initState() {
+    _setAccessToken();
     super.initState();
     updateStatusBar();
     WidgetsBinding.instance.addObserver(this);

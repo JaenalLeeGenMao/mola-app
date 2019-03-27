@@ -14,6 +14,8 @@ import './loader.dart';
 
 import '../detail/detail.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class HomePage extends StatefulWidget {
   final String title;
 
@@ -33,6 +35,13 @@ class _HomePageState extends State<HomePage> {
 
   var _activePlaylist;
   var _activeVideo;
+
+  var _accessToken;
+  _getAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+      _accessToken = prefs.getString('access_token');
+      print('Token Home : $_accessToken');
+  }
 
   final SwiperController _controller = new SwiperController();
 
@@ -57,7 +66,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _init();
-
+    _getAccessToken();
     super.initState();
   }
 
@@ -92,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                         playlists: _playlists,
                         videos: _videos,
                       ),
-                      Header(_isDark),
+                      Header(_isDark, _accessToken),
                       Footer(
                           controller: _controller,
                           video: _activeVideo,
