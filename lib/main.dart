@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   
   @override
   void initState() {
-    _setAccessToken();
+    // _setAccessToken();
     super.initState();
     updateStatusBar();
     WidgetsBinding.instance.addObserver(this);
@@ -57,10 +57,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     debugPrint('life cycle test $state');
 
     if(state == AppLifecycleState.resumed) {
-      _timerLink = new Timer(const Duration(milliseconds: 1000), () {
-        print("lifecycle masuk");
+      // _timerLink = new Timer(const Duration(milliseconds: 1000), () {
         _listenDeepLink();
-      });
+      // });
     }
   }
 
@@ -72,16 +71,27 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Future<void> _listenDeepLink() async {
-    print('masuk ke listenDeepLink');
+    print('masuk ke listenDeepLink setelah 1 detik...');
 
-    _sub = getLinksStream().listen((String link) {
-      print('link dapet $link');
-    }, 
-    onError: (err) {
-      print('error link ga dapet $err');
-    });
+    try {
+      String url = await getInitialLink();
+      print(url);
 
-    dispose();
+
+      _sub = getLinksStream().listen((String link) {
+        print('link dapet $link');
+        // put the link into local storage in order to use them to be processed
+      }, 
+      onError: (err) {
+        print('error link ga dapet $err');
+      });
+
+      dispose();
+      
+    } on PlatformException {
+
+    }
+
   }
 
   // @override
