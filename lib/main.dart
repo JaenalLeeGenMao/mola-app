@@ -35,10 +35,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       // set token in here
-      _accessToken = "getApi";
-      prefs.setString('access_token', _accessToken);
+      // _accessToken = "getApi";
+      // prefs.setString('access_token', _accessToken);
       // prefs.remove('access_token');
-      print('Token Main : $_accessToken');
+      // print('Token Main : $_accessToken');
     });
   }
   

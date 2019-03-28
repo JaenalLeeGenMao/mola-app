@@ -1,5 +1,8 @@
 Map<String, dynamic> config() {
-  final env = "STAGING";
+  // uncomment one of these two lines to switch between env
+  // final env = "STAGING";
+  final env = "PRODUCTION";
+
   final uploader = {
     "clientId": 'ef4723e0-b3b4-4ed9-a45f-fb1cd5a8f024',
     "clientSecret": '289cf0055454348a172d1520c8c70eb9',
@@ -41,7 +44,7 @@ Map<String, dynamic> config() {
         "serverUrl": "https://stag.mola.tv",
         "api": "https://stag.mola.tv/api/v2",
         "auth": "https://stag.mola.tv/accounts/_",
-        "accounts": "https://mola.tv/accounts",
+        "accounts": "https://stag.mola.tv/accounts",
         "domain": "https://stag.mola.tv",
         "ads": "https://api.stag.supersoccer.tv",
         "setting": {"timeout": 10000, "maxRedirects": 1},
