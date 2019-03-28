@@ -29,6 +29,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   double _statusBarOpacity = 1.0;
   bool _statusBarColorAnimated = false;
   var _accessToken;
+  StreamSubscription _sub;
+  Timer _timerLink;
 
   _setAccessToken() async {
     //get api token in here
@@ -55,11 +57,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     debugPrint('life cycle test $state');
 
     if(state == AppLifecycleState.resumed) {
-      print("lifecycle masuk");
-      listenDeepLink();
-    }
-    else{
-      print('life cycle ga masuk');
+      _timerLink = new Timer(const Duration(milliseconds: 1000), () {
+        print("lifecycle masuk");
+        _listenDeepLink();
+      });
     }
   }
 
@@ -70,17 +71,27 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         animated: _statusBarColorAnimated);
   }
 
-  Future<void> listenDeepLink() async {
-    Uri initialUri = await getInitialUri();
-    // Uri initialUri2 = await Uri.parse(initialUri);
-    print('initialUri = $initialUri');
+  Future<void> _listenDeepLink() async {
+    print('masuk ke listenDeepLink');
 
-    if(initialUri!=null) {
-      print('pint initialUri $initialUri');
+    _sub = getLinksStream().listen((String link) {
+      print('link dapet $link');
+    }, 
+    onError: (err) {
+      print('error link ga dapet $err');
+    });
+
+    dispose();
+  }
+
+  // @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink!=null) {
+      _timerLink.cancel();
+      _sub.cancel();
     }
-    else {
-      print("error no deeplink");
-    }
+    super.dispose();
   }
 
   @override
