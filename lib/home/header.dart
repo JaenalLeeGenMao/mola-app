@@ -18,7 +18,7 @@ class Header extends StatelessWidget {
   void _launchURL() async {
     var url = '$loginUrl?redirectUri=$appLink';
     if (await canLaunch(url)) {
-      await launch(url);
+      await launch(url, forceSafariVC: false);
     } else {
       throw 'Could not launch $url';
     }

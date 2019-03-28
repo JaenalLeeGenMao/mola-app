@@ -1,7 +1,7 @@
 Map<String, dynamic> config() {
   // uncomment one of these two lines to switch between env
-  // final env = "STAGING";
-  final env = "PRODUCTION";
+  final env = "STAGING";
+  // final env = "PRODUCTION";
 
   final uploader = {
     "clientId": 'ef4723e0-b3b4-4ed9-a45f-fb1cd5a8f024',
