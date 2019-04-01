@@ -7,10 +7,12 @@ import '../models/video.dart';
 import '../../config.dart';
 
 final Map<String, dynamic> data = config();
-final String baseUrl = data["api"];
+final String baseUrl = data['api'];
 
 getHomePlaylist() async {
   final url = '$baseUrl/videos/playlists/mola-home';
+
+  print('url nya home API: $url');
 
   var response = await http.get(url).timeout(const Duration(seconds: 5));
   print("timeout nih");
@@ -36,6 +38,7 @@ getHomePlaylist() async {
 }
 
 getHomeVideos(id) async {
+  // var baseUrl = stagingMode == '1' ? baseUrlStaging : baseUrlProd;
   final url = '$baseUrl/videos/playlists/$id';
   var response = await http.get(url);
 

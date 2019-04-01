@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
+import '../config.dart';
+
+final Map<String, dynamic> data = config();
+
 class Header extends StatelessWidget {
   final bool isDark;
+  var accessToken;
+  final String loginUrl = '${data['accounts']}/login';
+  final String appLink = data['appLink'];
 
-  Header(this.isDark);
+  Header(this.isDark, this.accessToken);
+
+  void _launchURL() async {
+    var url = '$loginUrl?redirectUri=$appLink';
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: false, forceWebView: false);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,22 +59,26 @@ class Header extends StatelessWidget {
                   },
                 ),
                 FloatingActionButton(
-                  heroTag: 'PROFILE_BUTTON',
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  mini: true,
-                  tooltip: "Profile",
-                  elevation: 0.0,
-                  foregroundColor: isDark ? Colors.black : Colors.white,
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    CupertinoIcons.profile_circled,
-                    size: 32,
-                  ),
-                  onPressed: () {
-                    print("profile looking good :3");
-                    Navigator.pushNamed(context, '/profile');
-                  },
-                ),
+                    heroTag: 'PROFILE_BUTTON',
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    mini: true,
+                    tooltip: "Profile",
+                    elevation: 0.0,
+                    foregroundColor: isDark ? Colors.black : Colors.white,
+                    backgroundColor: Colors.transparent,
+                    child: Icon(
+                      CupertinoIcons.profile_circled,
+                      size: 32,
+                    ),
+                    onPressed: () {
+                      print("profile looking good :3");
+                      print("$accessToken");
+                      /* Harusnya ada sesuatu untuk refresh token tapi nanti da */
+                      accessToken == null
+                          // ? _launchURL()
+                          ? Navigator.pushNamed(context, '/accounts/login')
+                          : Navigator.pushNamed(context, '/profile');
+                    }),
               ],
             )
           ],

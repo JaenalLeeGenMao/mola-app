@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 
 import './routes.dart';
 
@@ -18,22 +23,79 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   /// This widget is the root of your application.
   Color _statusBarColor = Color.fromRGBO(8, 44, 66, 1.0);
   double _statusBarOpacity = 1.0;
   bool _statusBarColorAnimated = false;
+  var _accessToken;
+  StreamSubscription _sub;
+  Timer _timerLink;
+
+  _setAccessToken() async {
+    //get api token in here
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      // set token in here
+      // _accessToken = "getApi";
+      // prefs.setString('access_token', _accessToken);
+      // prefs.remove('access_token');
+      // print('Token Main : $_accessToken');
+    });
+  }
 
   @override
-  initState() {
-    updateStatusBar();
+  void initState() {
+    // _setAccessToken();
     super.initState();
+    updateStatusBar();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint('life cycle test $state');
+
+    if (state == AppLifecycleState.resumed) {
+      // _timerLink = new Timer(const Duration(milliseconds: 1000), () {
+      _listenDeepLink();
+      // });
+    }
   }
 
   void updateStatusBar() {
+    print('masuk ke updateStatusBar');
     FlutterStatusbarManager.setColor(
         _statusBarColor.withOpacity(_statusBarOpacity),
         animated: _statusBarColorAnimated);
+  }
+
+  Future<void> _listenDeepLink() async {
+    print('masuk ke listenDeepLink setelah 1 detik...');
+
+    try {
+      String url = await getInitialLink();
+      print(url);
+
+      _sub = getLinksStream().listen((String link) {
+        print('link dapet $link');
+        // put the link into local storage in order to use them to be processed
+      }, onError: (err) {
+        print('error link ga dapet $err');
+      });
+
+      dispose();
+    } on PlatformException {}
+  }
+
+  // @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink != null) {
+      _timerLink.cancel();
+      _sub.cancel();
+    }
+    super.dispose();
   }
 
   @override

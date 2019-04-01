@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:flutter_swiper/flutter_swiper.dart';
+import '../package/flutter_swiper/lib/flutter_swiper.dart';
 
 import './models/playlist.dart';
 import './models/video.dart';
@@ -21,7 +21,7 @@ class Footer extends StatelessWidget {
     return new Positioned(
       left: 20.0,
       right: 0.0,
-      bottom: 10.0,
+      bottom: 12.0,
       child: new Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -38,7 +38,7 @@ class Footer extends StatelessWidget {
             },
           ),
           Text(
-            "Terbaik dari film ${playlist.title}",
+            "film ${playlist.title} lain",
             style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
           )
           // Material(
