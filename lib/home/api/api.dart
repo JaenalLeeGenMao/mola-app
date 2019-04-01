@@ -7,7 +7,7 @@ import '../models/video.dart';
 import '../../config.dart';
 
 final Map<String, dynamic> data = config();
-  final String baseUrl = data['api'];
+final String baseUrl = data['api'];
 
 getHomePlaylist() async {
   final url = '$baseUrl/videos/playlists/mola-home';

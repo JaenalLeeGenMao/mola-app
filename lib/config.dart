@@ -8,10 +8,11 @@ Map<String, dynamic> config() {
     "clientSecret": '289cf0055454348a172d1520c8c70eb9',
     "ptoken": '3e0d9625b0ecc7a547ec853c76834d85',
   };
+
   final oauth = {
-    "appKey": 'wIHGzJhset',
+    "appKey": 'LDZJgphCc7',
     "appSecret":
-        'vyxtMDxcrPcdl8BSIrUUD9Nt9URxADDWCmrSpAOMVli7gBICm59iMCe7iyyiyO9x',
+        '7NPI1ATIGGDpGrAKKfyroNNkGkMuTNhfBoew6ghy00rAjsANLvehhZi4EAbEta2D',
     "scope": [
       'https://internal.supersoccer.tv/users/users.profile.read',
       'https://internal.supersoccer.tv/subscriptions/users.read' /* DARI CODINGAN LAMA */,

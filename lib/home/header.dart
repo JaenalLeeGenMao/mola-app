@@ -75,7 +75,8 @@ class Header extends StatelessWidget {
                       print("$accessToken");
                       /* Harusnya ada sesuatu untuk refresh token tapi nanti da */
                       accessToken == null
-                          ? _launchURL()
+                          // ? _launchURL()
+                          ? Navigator.pushNamed(context, '/accounts/login')
                           : Navigator.pushNamed(context, '/profile');
                     }),
               ],

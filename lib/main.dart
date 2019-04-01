@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // print('Token Main : $_accessToken');
     });
   }
-  
+
   @override
   void initState() {
     // _setAccessToken();
@@ -56,9 +56,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     debugPrint('life cycle test $state');
 
-    if(state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed) {
       // _timerLink = new Timer(const Duration(milliseconds: 1000), () {
-        _listenDeepLink();
+      _listenDeepLink();
       // });
     }
   }
@@ -77,27 +77,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       String url = await getInitialLink();
       print(url);
 
-
       _sub = getLinksStream().listen((String link) {
         print('link dapet $link');
         // put the link into local storage in order to use them to be processed
-      }, 
-      onError: (err) {
+      }, onError: (err) {
         print('error link ga dapet $err');
       });
 
       dispose();
-      
-    } on PlatformException {
-
-    }
-
+    } on PlatformException {}
   }
 
   // @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    if (_timerLink!=null) {
+    if (_timerLink != null) {
       _timerLink.cancel();
       _sub.cancel();
     }

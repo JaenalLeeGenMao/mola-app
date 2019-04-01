@@ -4,6 +4,8 @@ import './search/search.dart';
 import './library/library.dart';
 import './detail/detail.dart';
 
+import './accounts/login.dart';
+
 getRoutes() {
   return {
     '/': (context) => HomePage(title: 'Flutter Demo Home Page'),
@@ -11,5 +13,6 @@ getRoutes() {
     '/search': (context) => Search(),
     '/library': (context) => Library(null),
     '/detail': (context) => Detail(null),
+    '/accounts/login': (context) => Login()
   };
 }
